@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+</head>
+
+<body>
+  <div id="canvas_3d"></div>
+  <style type="text/css">
+    html,
+    body {
+      height: 100%;
+      width: 100%;
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+  <script src="../3dSdk/HG3DMap.min.js"></script>
+  <script src="lib/jquery/jquery.min.js"></script>
+  <script>
+    var my_map = new HG3DMap.map();//定义地图对象
+    var init_val = {
+      // scene_url: "3DScene/show.json",//场景地址
+      scene_url: '/json/xyz.json',
+      model_height: 1.5,//模型高度
+      track_height: 1.4,//轨迹高度
+      tips_height: 1.5,//提示语高度
+      camera_tween_speed: 1,//相机追踪平移速度
+      camera_model_patrol_dist: 20,//相机离巡视目标的最小距离
+      dom_element: "canvas_3d",
+      card_type: 1,//1 代表的 fbx， 2 代表的是 json
+      ex_dom_element: "inset",//小地图的 dom 元素
+      scale_dist: 20,//聚类距离系数，越大越密
+      start_move_dist: 0.1,//开始移动的最小距离差
+      min_stop_delta_time: 1,//最小的停止移动时间
+      cache_time: 2,//数据缓存时间
+      open_tips: false,//是否开启内部卡标签提示
+      offset_top: 57,//dom_element，离浏览器上边框的偏移
+      offset_left: 0,//dom_element，离浏览器左边框的偏移
+      open_fps: true,//是否开启 fps 检测
+      model_path: "/position_3d/App/Public/3D/",//模型存放路径，这个路      径下包含: 定位卡模型，基站模型和点击点标记模型select_color: 0xff0000,//模型选中显示颜色
+      flash_color_1: 0xff0000,//闪烁颜色 1
+      flash_color_2: 0xffcc00,//闪烁颜色 2
+      fps: 60,//渲染帧率，默认是 20 帧
+      little_map_render_width: 300,//小地图的渲染宽
+      little_map_width_height_ratio: 16 / 9,//小地图的渲染宽高比例
+      shadow_height: 0,//阴影高度
+      open_shadow: true,//开始起阴影
+      render_little_map_factor: 0.9,//渲染场景占满小地图系数比例
+      scene_background_imgs: ['px.jpg', 'px.jpg', 'py.jpg', 'ny.jpg', 'px.jpg', 'px.jpg'],//天空盒子
+      open_little_map: true//开启小地图
+    }
+    my_map.init(init_val)
+  </script>
+</body>
+
+</html>

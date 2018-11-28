@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="img/favicon.png"/>
+    <title></title>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" href="lib/laypage/skin/laypage.css"/>
+    <link rel="stylesheet" href="src/public/main.css" />
+    <link rel="stylesheet" href="src/fence/ruleAdmin.css"/>
+</head>
+<body>
+<!--新的报警-->
+<div class="new_alarm_info">
+    <div class="left_icon">
+        <img src="./img/alarm_icon.png" alt="">
+    </div>
+    <div class="right_alarm">
+        <div class="real_content" id="new_alarm_text">
+            <p></p>
+        </div>
+        <div class="all_buttons">
+            <div class="close_button">
+                <span class="glyphicon glyphicon-remove"></span>
+            </div>
+            <div class="click_button" id="event_buttons">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--上边栏-->
+<header class="header">
+    <h3 class="system_name"></h3>
+    <div class="login_info">
+        <div class="bell_container">
+            <span class="glyphicon glyphicon-bell"></span>
+            <!--<span class="alarm_number"></span>-->
+            <ul class="alarm_list"></ul>
+        </div>
+        <a href="#" class="modify_user"><img src="img/icon/userEdit.png"></a>
+        <a href="#" class="login_out"><img src="img/icon/logOut.png"></a>
+    </div>
+</header>
+<!--左侧边导航栏-->
+<div id="main_nav">
+    <div>
+        <h4>实时显示<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="realTime2D.html">平面视图</a></li>
+            <li><a href="realTime3D.html">立体视图</a></li>
+            <li><a href="realTimeList.html">列表视图</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>轨迹回放<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="historyCard2D.html">平面视图</a></li>
+            <li><a href="historyCard3D.html">立体视图</a></li>
+            <li><a href="historyHeatMap.html">轨迹热力图</a></li>
+            <li><a href="historyTest.html">历史查询</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>地图管理<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="sceneBuilding.html">场景建筑</a></li>
+            <li><a href="map.html">地图设置</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>电子围栏<span class="glyphicon glyphicon-chevron-down"></span></h4>
+        <ul class="ul_show">
+            <li><a href="fenceAlarm.html">警示信息</a></li>
+            <li><a href="staticFence.html">静态围栏</a></li>
+            <li><a href="ruleAdmin.html" class="active">规则管理</a></li>
+            <li><a href="dynamicFence.html">动态围栏</a></li>
+            <li><a href="areaSet.html">障碍物设置</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>设备管理<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="alarmCall.html">呼叫求救</a></li>
+            <li><a href="lowerPower.html">欠压提醒</a></li>
+            <li><a href="cardInfo.html">卡号列表</a></li>
+            <li><a href="camera.html">摄像头管理</a></li>
+            <li><a href="nvrDevice.html">录像机管理</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>拓展功能<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="attendance.html">考勤报表</a></li>
+            <li><a href="systemConfig.html">系统配置</a></li>
+        </ul>
+    </div>
+</div>
+
+<!--修改用户名和密码模态框-->
+<div class="modal fade" id="modal_modify_user" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>修改用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="input_modify_user_name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">旧密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_old">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_new">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">确定密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_again">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" id="button_modify_user_save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--新增、修改模态框-->
+<div class="modal fade" id="modal_add_rule" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 id="add_text">新增规则</h4>
+                <h4 id="edit_text">修改规则</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="add_rule_name">规则名称</label>
+                        <input type="text" class="form-control" id="add_rule_name" >
+                    </div>
+                    <div class="form-group">
+                        <label for="add_rule_type">规则类型</label>
+                        <select class="form-control" id="add_rule_type">
+                            <option value="1">仅允许进入</option>
+                            <option value="2">仅拒绝进入</option>
+                            <option value="3">仅允许离开</option>
+                            <option value="4">仅拒绝离开</option>
+                            <option value="5">区域超时</option>
+                            <option value="6">区域不动</option>
+                            <option value="7">区域消失</option>
+                            <option value="8">聚众报警</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="input_static_time" style="display: none">
+                        <label for="add_static_time">不动报警时间(分钟)</label>
+                        <input type="text" class="form-control" id="add_static_time" >
+                    </div>
+                    <div class="form-group" id="input_over_time" style="display: none">
+                        <label for="add_over_time">超时报警时间(分钟)</label>
+                        <input type="text" class="form-control" id="add_over_time" >
+                    </div>
+                    <div class="form-group" id="input_over_man" style="display: none">
+                        <label for="add_over_man">聚众人数</label>
+                        <div  style="height: 34px;">
+                            <input type="text" class="form-control" id="add_over_area" style="display: inline-block;width: 40%;">
+                            <label>平方米</label>
+                            <input type="text" class="form-control" id="add_over_man" style="display: inline-block;width: 40%;">
+                            <label>人</label>
+                        </div>
+                    </div>
+                    <div class="form-group" id="input_card_all">
+                        <label for="card_all">适用所有卡号</label>
+                        <select class="form-control" id="card_all">
+                            <option value="1">是</option>
+                            <option value="0">否</option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="input_area_card" style="display: none">
+                        <label>人员</label>
+                        <div class="checkbox" style="margin-bottom: -5px">
+                            <label><input type="checkbox" id="area_card_all_add">全选</label>
+                        </div>
+                        <div class="checkbox" id="list_area_card_add">
+                        </div>
+                    </div>
+                    <div class="form-group checkbox">
+                        <label style="margin-left: 0px;font-weight: bold;"><input type="checkbox" id="valid_time">永久有效</label>
+                        <div style="height: 34px" id="time_input">
+                            <div class="input-group">
+                                <span class="input-group-addon">开始</span>
+                                <input type="text" class="form-control real_only_white" id="start_data" readonly>
+                            </div>
+
+                            <div class="input-group picker_time" >
+                                <span class="input-group-addon">:</span>
+                                <input type="text" class="form-control real_only_white" id="start_time" readonly>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">结束</span>
+                                <input type="text" class="form-control real_only_white" id="end_data" readonly>
+                            </div>
+                            <div class="input-group picker_time" >
+                                <span class="input-group-addon">:</span>
+                                <input type="text" class="form-control real_only_white" id="end_time" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group checkbox">
+                        <label style="margin-left: 0px;font-weight: bold;padding-left: 0px;">重复时间段</label>
+                        <i class="glyphicon glyphicon-plus" id="time_plus"></i>
+                        <div style="height: 34px;display: none;" id="show_time_select">
+                            <div class="input-group picker_time">
+                                <select  class="form-control" id="start_hour_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                </select>
+                            </div>
+                            <div class="input-group picker_time">
+                                <span class="input-group-addon">:</span>
+                                <select  class="form-control" style="width: 70px;" id="start_minute_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                    <option value="32">32</option>
+                                    <option value="33">33</option>
+                                    <option value="34">34</option>
+                                    <option value="35">35</option>
+                                    <option value="36">36</option>
+                                    <option value="37">37</option>
+                                    <option value="38">38</option>
+                                    <option value="39">39</option>
+                                    <option value="40">40</option>
+                                    <option value="41">41</option>
+                                    <option value="42">42</option>
+                                    <option value="43">43</option>
+                                    <option value="44">44</option>
+                                    <option value="45">45</option>
+                                    <option value="46">46</option>
+                                    <option value="47">47</option>
+                                    <option value="48">48</option>
+                                    <option value="49">49</option>
+                                    <option value="50">50</option>
+                                    <option value="51">51</option>
+                                    <option value="52">52</option>
+                                    <option value="53">53</option>
+                                    <option value="54">54</option>
+                                    <option value="55">55</option>
+                                    <option value="56">56</option>
+                                    <option value="57">57</option>
+                                    <option value="58">58</option>
+                                    <option value="59">59</option>
+                                </select>
+                            </div>
+                            <div class="input-group picker_time">
+                                <span class="input-group-addon">~</span>
+                                <select  class="form-control" style="width: 70px;" id="end_hour_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                </select>
+                            </div>
+                            <div class="input-group picker_time">
+                                <span class="input-group-addon">:</span>
+                                <select  class="form-control" style="width: 70px;" id="end_minute_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                    <option value="32">32</option>
+                                    <option value="33">33</option>
+                                    <option value="34">34</option>
+                                    <option value="35">35</option>
+                                    <option value="36">36</option>
+                                    <option value="37">37</option>
+                                    <option value="38">38</option>
+                                    <option value="39">39</option>
+                                    <option value="40">40</option>
+                                    <option value="41">41</option>
+                                    <option value="42">42</option>
+                                    <option value="43">43</option>
+                                    <option value="44">44</option>
+                                    <option value="45">45</option>
+                                    <option value="46">46</option>
+                                    <option value="47">47</option>
+                                    <option value="48">48</option>
+                                    <option value="49">49</option>
+                                    <option value="50">50</option>
+                                    <option value="51">51</option>
+                                    <option value="52">52</option>
+                                    <option value="53">53</option>
+                                    <option value="54">54</option>
+                                    <option value="55">55</option>
+                                    <option value="56">56</option>
+                                    <option value="57">57</option>
+                                    <option value="58">58</option>
+                                    <option value="59">59</option>
+                                </select>
+                            </div>
+                            <span class="glyphicon glyphicon-remove" style="position: absolute;top:40px;right:185px;color:#f00;"></span>
+                            <span class="glyphicon glyphicon-ok" style="position: absolute;top:40px;right:210px;color: #00BFFF;"></span>
+                        </div>
+                        <div id="time_list" style="margin-top: 5px">
+                        </div>
+                    </div>
+                    <div class="form-group checkbox" id="repeat_week">
+                        <label style="margin-left: 0px;"><input type="checkbox" id="every_day">每天</label>
+                        <div id="week_select">
+                            <button type="button" class="btn btn-default" data-value="0">周一</button>
+                            <button type="button" class="btn btn-default" data-value="1">周二</button>
+                            <button type="button" class="btn btn-default" data-value="2">周三</button>
+                            <button type="button" class="btn btn-default" data-value="3">周四</button>
+                            <button type="button" class="btn btn-default" data-value="4">周五</button>
+                            <button type="button" class="btn btn-default" data-value="5">周六</button>
+                            <button type="button" class="btn btn-default" data-value="6">周日</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label >使用状态</label>
+                        <select id="select_rule_is_use" class="form-control">
+                            <option value="1">使用</option>
+                            <option value="0">停用</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="add_comment">备注</label>
+                        <input type="text" class="form-control" id="add_comment" >
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" id="save_rule">保存</button>
+                <button class="btn btn-default" id="edit_rule">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--删除信息模态框-->
+<div class="modal fade" id="modal_delete_rule" data-backdrop=false>
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>删除该规则</h4>
+            </div>
+            <div class="modal-body">
+                删除的数据不可恢复,请确定.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" >取消</button>
+                <button class="btn btn-default" data-dismiss="modal" id="delete_rule">确认</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--右侧内容-->
+<div id="main_content">
+
+    <!--案例内容部分,自适应外界容器-->
+    <div id="example">
+        <div class="example_div">
+            <div class="page-header">
+                <div class="input-group">
+                    <span class="input-group-addon">规则名称</span>
+                    <input type="text" class="form-control" id="search_rule_name">
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">规则类型</span>
+                    <select class="form-control" id="search_rule_type">
+                        <option value="">全部</option>
+                        <option value="1">仅允许进入</option>
+                        <option value="2">仅拒绝进入</option>
+                        <option value="3">仅允许离开</option>
+                        <option value="4">仅拒绝离开</option>
+                        <option value="5">区域超时</option>
+                        <option value="6">区域不动</option>
+                        <option value="7">区域消失</option>
+                        <option value="8">聚众报警</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">开始</span>
+                    <input type="text" class="form-control real_only_white" id="search_start_data" readonly>
+                </div>
+                <div class="input-group picker_time" >
+                    <span class="input-group-addon">:</span>
+                    <input type="text" class="form-control real_only_white" id="search_start_time" readonly>
+                </div>
+
+                <div class="input-group">
+                    <span class="input-group-addon">结束</span>
+                    <input type="text" class="form-control real_only_white" id="search_end_data" readonly>
+                </div>
+                <div class="input-group picker_time" >
+                    <span class="input-group-addon">:</span>
+                    <input type="text" class="form-control real_only_white" id="search_end_time" readonly>
+                </div>
+                <button class="btn btn-default" id="query_rule">查询</button>
+                <button class="btn btn-default" id="add_rule">新增规则</button>
+            </div>
+            <div class="table_div">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>序号</th><th>规则名称</th><th>规则类型</th><th>有效期</th>
+                        <th>备注</th><th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table_rule">
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="pages pull-right" style="margin-top: 5px">
+                <div id="pages"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/layer/layer.js"></script>
+<script src="lib/mqtt.js"></script>
+<script src="lib/md5.js"></script>
+<script src="src/public/config.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script src="lib/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="lib/laypage/laypage.js"></script>
+<script src="src/public/main.js"></script>
+<script src="src/fence/ruleAdmin.js"></script>
+</body>
+</html>

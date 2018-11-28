@@ -1,0 +1,38 @@
+#map{
+    width: 100%;
+    height: 100%;
+    background-color: #f2f1ed;
+}
+tr .active{
+    background-color: #eeeeee;
+}
+#modal_add_map .item{
+    display: inline-block;
+    margin-left: 20px;
+}
+#table_div{
+    height: calc(74% - 100px);
+    overflow-y: auto;
+}
+#all_text_tip{
+    font-size: 17px;
+    font-weight: bold;
+    margin-bottom: 25px;
+    color: #9a9a9a;
+}
+#all_text_tip>span{
+    margin-right: 10px;
+}
+.num_style{
+    padding: 3px 9px;
+    background-color: #9a9a9a;
+    color: #fff;
+    border-radius: 15px;
+    margin-right: 10px;
+}
+.num_active{
+    background-color: #0099ff;
+}
+.text_active{
+    color: #0099ff;
+}

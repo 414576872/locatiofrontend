@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="img/favicon.png"/>
+    <title></title>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="../2dSdk/HG2DMap.min.css">
+    <link rel="stylesheet" href="src/public/main.css" />
+    <link rel="stylesheet" href="../videoSdk/HGPlayer.min.css" />
+    <link rel="stylesheet" href="src/display/realTime2D.css" />
+    <link rel="stylesheet" href="src/display/camera.css" />
+</head>
+<body>
+<!--新的报警-->
+<div class="new_alarm_info">
+    <div class="left_icon">
+        <img src="./img/alarm_icon.png" alt="">
+    </div>
+    <div class="right_alarm">
+        <div class="real_content" id="new_alarm_text">
+            <p></p>
+        </div>
+        <div class="all_buttons">
+            <div class="close_button">
+                <span class="glyphicon glyphicon-remove"></span>
+            </div>
+            <div class="click_button" id="event_buttons">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--上边栏-->
+<header class="header">
+    <h3 class="system_name"></h3>
+    <div class="login_info">
+        <div class="bell_container">
+            <span class="glyphicon glyphicon-bell"></span>
+            <ul class="alarm_list"></ul>
+        </div>
+        <a href="#" class="modify_user"><img src="img/icon/userEdit.png"></a>
+        <a href="#" class="login_out"><img src="img/icon/logOut.png"></a>
+    </div>
+</header>
+<!--左侧边导航栏-->
+<div id="main_nav">
+    <div>
+        <h4>实时显示<span class="glyphicon glyphicon-chevron-down"></span></h4>
+        <ul class="ul_show">
+            <li><a href="realTime2D.html" class="active">平面视图</a></li>
+            <li><a href="realTime3D.html">立体视图</a></li>
+            <li><a href="realTimeList.html">列表视图</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>轨迹回放<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="historyCard2D.html">平面视图</a></li>
+            <li><a href="historyCard3D.html">立体视图</a></li>
+            <li><a href="historyHeatMap.html">轨迹热力图</a></li>
+            <li><a href="historyTest.html">历史查询</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>地图管理<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="sceneBuilding.html">场景建筑</a></li>
+            <li><a href="map.html">地图设置</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>电子围栏<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="fenceAlarm.html">警示信息</a></li>
+            <li><a href="staticFence.html">静态围栏</a></li>
+            <li><a href="ruleAdmin.html">规则管理</a></li>
+            <li><a href="dynamicFence.html">动态围栏</a></li>
+            <li><a href="areaSet.html">障碍物设置</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>设备管理<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="alarmCall.html">呼叫求救</a></li>
+            <li><a href="lowerPower.html">欠压提醒</a></li>
+            <li><a href="cardInfo.html">卡号列表</a></li>
+            <li><a href="camera.html">摄像头管理</a></li>
+            <li><a href="nvrDevice.html">录像机管理</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>拓展功能<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="attendance.html">考勤报表</a></li>
+            <li><a href="systemConfig.html">系统配置</a></li>
+        </ul>
+    </div>
+</div>
+
+<!--修改用户名和密码模态框-->
+<div class="modal fade" id="modal_modify_user" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>修改用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="input_modify_user_name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">旧密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_old">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_new">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">确定密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_again">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" id="button_modify_user_save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--录像是否确认下载模态框-->
+<div class="modal fade" id="modal_video_download" data-backdrop=false style="z-index: 6000;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>提示</h4>
+            </div>
+            <div class="modal-body">
+                该设备正在录像，是否保存视频文件？
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" id="cancel_save">取消</button>
+                <button class="btn btn-info" id="confirm_download_video">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--右侧内容-->
+<div id="main_content">
+
+    <!--案例内容部分,自适应外界容器-->
+    <div id="example">
+        <!--放置地图的容器-->
+        <div id="map">
+            <!--弹出信息放置的容器-->
+            <div id="popup" style="width: 130px;"></div>
+        </div>
+        <!--地图右下角 鼠标所在位置的坐标显示-->
+        <div id="mouse_position"></div>
+        <!--地图左下角 测量工具-->
+        <div style="position: absolute;bottom:130px;left:10px">
+            <img src="img/mapStaff.png" alt="pic" style="width: 23px" id="measure_location">
+            <img src="img/delete.png" alt="pic" id="clear_measure_location" style="display: none">
+        </div>
+        <!--地图左下角 回到原点-->
+        <div style="position: absolute;bottom:100px;left:10px">
+            <img src="img/backCenter.png" alt="pic" style="width: 23px" id="back_origin">
+        </div>
+        <!--地图左下角 旋转-->
+        <div style="position: absolute;bottom:160px;left:10px;cursor: pointer;">
+            <img src="img/rotate.png" alt="pic" style="width: 23px" id="rotate">
+        </div>
+        <!--载入时的loading图标-->
+        <div id="loading_img">
+            <div class="progress_bar">
+                <img src="img/loading.gif">
+                <div class="progress_bar_bottom">
+                    <div class="progress_bar_top">
+                    </div>
+                </div>
+                <p></p>
+            </div>
+        </div>
+
+        <!--地图左上的地图选择和输入卡号锁定某张卡-->
+        <div class="left_menu">
+            <div class="input-group shadow" style="width:225px;margin-right: 10px;">
+                <span class="input-group-addon">地图</span>
+                <select class="form-control" id="floor_select">
+                </select>
+            </div>
+
+            <div class="input-group" style="width: 225px;margin-top: 10px;">
+                <input class="form-control" id="query_card_input" style="border-radius: 4px" placeholder="输入卡号查找"/>
+                <i class="glyphicon glyphicon-search" style="position: absolute;top: 10px;right: 10px;z-index: 3;color: #ccc;"></i>
+            </div>
+
+            <div class="list-group" id="search_card_list" style="width: 225px;margin-top: 10px;">
+            </div>
+        </div>
+
+        <!--地图右侧悬浮框-->
+        <div id="right_top_menu">
+            <div class="right_menu shadow">
+                <div>
+                    区域列表<i class="glyphicon glyphicon-chevron-down" data-id="area"></i>
+                </div>
+                <div>
+                    标签列表<i class="glyphicon glyphicon-chevron-right" data-id="track"></i>
+                </div>
+                <div>
+                    摄像头列表<i class="glyphicon glyphicon-chevron-right" data-id="equip"></i>
+                </div>
+            </div>
+            <div class="right_content shadow">
+                <div id="area">
+                    <div class="panel_table_area">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th><input type="checkbox"></th><th>名称</th><th>人数</th><th>启用</th><th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="table_area">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <p id="search_all_person" style="margin-bottom: 0px;margin-top: 10px;width: 55%;display: inline-block;">楼层总人数：0</p>
+                    <div id="evacuate_text">
+                        <span class="evacuate_span_active">临时绘制撤离区域</span>
+                    </div>
+                </div>
+                <div id="track">
+                    <div class="form-group">
+                        <span>(点击"选择框"进行轨迹追踪)</span>
+                        <span id="clear_track_btn" style="cursor: pointer;color: #0099ff;position: relative;left:90px">清除轨迹</span>
+                    </div>
+                    <div class="panel_table_area">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th><input type="checkbox"></th><th>卡号</th><th>操作</th><th>视点追踪</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tbody_card_info">
+
+                            </tbody>
+                        </table>
+                    </div>
+                    <p id="center_card" style="margin-bottom: 0px;margin-top: 10px;width: 70%;display: inline-block;"></p>
+                    <p id="change_show_cluster" style="margin-bottom: 0px;margin-top: 10px;width: 26%;display: inline-block;cursor: pointer;color: #0099ff;">关闭聚类显示</p>
+                </div>
+                <div id="equip">
+                    <div class="panel_table_area">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>名称</th><th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody id="table_equip">
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <!--自定义区域撤离-->
+            <div class="shadow" id="evacuate">
+                <div>
+                    <div class="form-group">
+                        <label style="width:100%"><span id="custom_text" style="font-weight: bold">自定义区域</span><i class="glyphicon glyphicon-remove pull-right"></i></label>
+                        <div class="input-group shadow" id="area_draw_type">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="draw_type">类型<span class="caret"></span></button>
+                                <ul class="dropdown-menu">
+                                    <li><a href="#" id="draw_circle">圆形</a></li>
+                                    <li><a href="#" id="draw_box">矩形</a></li>
+                                    <li><a href="#" id="draw_polygon">多边形</a></li>
+                                </ul>
+                            </div>
+                            <input type="text" class="form-control" disabled id="draw_info" value="请选择需要绘制的类型">
+                            <div class="input-group-btn">
+                                <button type="button" class="btn btn-default" id="cancel_draw">取消</button>
+                            </div>
+                        </div>
+                    </div>
+                    <label style="font-weight: bold">撤离列表</label>
+                    <div id="custom_evacuate_list"></div>
+                    <div style="margin-top: 20px">
+                        <button class="btn btn-blue" id="cancel_leave">取消</button>
+                        <button class="btn btn-blue" id="sure_leave">确定</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+<script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/layer/layer.js"></script>
+<script src="lib/mqtt.js"></script>
+<script src="lib/md5.js"></script>
+<script src="src/public/config.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="lib/mqtt.js"></script>
+<script src="../2dSdk/HG2DMap.min.js"></script>
+<script src="../videoSdk/HGPlayer.min.js"></script>
+<script src="src/public/main.js"></script>
+<script src="src/display/realTime2D.js"></script>
+<script src="src/display/camera.js"></script>
+</body>
+</html>

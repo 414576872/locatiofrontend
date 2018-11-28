@@ -1,0 +1,160 @@
+.tip_label
+{
+    position: absolute;
+    display: block;
+    cursor: default;
+}
+
+.tip_count {
+    position: absolute;
+    display:block;
+    width: 28px;
+    height: 38px;
+    left: -14px;
+    cursor: pointer;
+    bottom: 0;
+    color: white;
+}
+.tip_card{
+    position: absolute;
+    display:inline-block;
+    user-select: none;
+    bottom: 0;
+    color: white;
+    background-color: #2E2D3C;
+    font-size: xx-small;
+    padding: 0 5px;
+}
+
+.tip_count>p{
+    position: absolute;
+    top:0;
+    left: 0;
+    width: 28px;
+    height: 28px;
+    font-size:10px;
+    white-space: nowrap;
+    text-align: center;
+    line-height: 28px;
+    user-select: none;
+}
+.tip_count>img{
+    position: absolute;
+    left: 0;
+    top:0;
+}
+.tip_sub{
+    width: 120px;
+    position: absolute;
+    left: 20px;
+    display:none;
+    box-sizing: border-box;
+    top: -43px;
+    height: 200px;
+    overflow-y: hidden;
+    overflow-x:hidden;
+}
+.tip_sub_panel{
+    position: absolute;
+    top:0;
+    left: 0;
+    width:137px;
+    padding: 8px 0;
+    box-sizing: border-box;
+    background-color: rgba(26, 60, 100, 0.8);
+    max-height: 200px;
+    overflow-y: scroll;
+    overflow-x:hidden;
+
+}
+.tip_sub p{
+    text-align: left;
+    white-space: nowrap;
+    text-overflow:ellipsis;
+    margin-bottom: 0;
+    width: 120px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 12px;
+    overflow: hidden;
+    padding: 4px;
+    box-sizing: border-box;
+
+}
+.tip_sub p:hover{
+    background-color: #203d5c;
+}
+
+
+.tip_line
+{
+    position: absolute;
+    height: 30px;
+    width: 30px;
+    bottom: 0;
+    left:15px;
+    border-left: 1px solid #1a3e7a;
+    transform: skew(-40deg);
+    display: block;
+}
+
+.tip_tag
+{
+    position: absolute;
+    display: inline-block;
+    bottom: 30px;
+    left:28px;
+    font-size: 11px;
+    background-color: #1a3e7a;
+    padding: 2px 12px;
+    border-radius: 4px;
+    font-family: 'Oswald',sans-serif;
+    text-transform: uppercase;
+    white-space: nowrap;
+    cursor: pointer;
+    transition:background-color 200ms ease-out;
+}
+
+#panel_card_info{
+    position: absolute;
+    display: none;
+}
+#panel_card_info>div{
+    position: absolute;
+    background-color: white;
+    width: 200px;
+    left: -100px;
+    height: auto;
+    bottom:9px;
+    padding: 6px 6px 6px 6px;
+    border-radius: 4px;
+    border: 1px solid #cecece;
+    box-shadow:0 2px 2px rgba(0, 0, 0, 0.1);
+}
+
+#panel_card_info>span{
+    position: absolute;
+    left: -10px;
+    top:-10px;
+    display: block;
+    width: 0;
+    height: 0;
+    border-left: 10px solid transparent;
+    border-right: 10px solid transparent;
+    border-top: 10px solid white;
+}
+
+#panel_card_info p{
+    width: 100%;
+}
+
+#panel_card_info a{
+    margin-right: 5px;
+    cursor: pointer;
+}
+#panel_card_info i{
+    position: absolute;
+    top:6px;
+    right: 4px;
+    font-size: 16px;
+}

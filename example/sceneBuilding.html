@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="img/favicon.png"/>
+    <title></title>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/laypage/skin/laypage.css"/>
+    <link rel="stylesheet" href="src/public/main.css" />
+</head>
+<body>
+<!--新的报警-->
+<div class="new_alarm_info">
+    <div class="left_icon">
+        <img src="./img/alarm_icon.png" alt="">
+    </div>
+    <div class="right_alarm">
+        <div class="real_content" id="new_alarm_text">
+            <p></p>
+        </div>
+        <div class="all_buttons">
+            <div class="close_button">
+                <span class="glyphicon glyphicon-remove"></span>
+            </div>
+            <div class="click_button" id="event_buttons">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--上边栏-->
+<header class="header">
+    <h3 class="system_name"></h3>
+    <div class="login_info">
+        <div class="bell_container">
+            <span class="glyphicon glyphicon-bell"></span>
+            <!--<span class="alarm_number"></span>-->
+            <ul class="alarm_list"></ul>
+        </div>
+        <a href="#" class="modify_user"><img src="img/icon/userEdit.png"></a>
+        <a href="#" class="login_out"><img src="img/icon/logOut.png"></a>
+    </div>
+</header>
+<!--左侧边导航栏-->
+<div id="main_nav">
+    <div>
+        <h4>实时显示<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="realTime2D.html">平面视图</a></li>
+            <li><a href="realTime3D.html">立体视图</a></li>
+            <li><a href="realTimeList.html">列表视图</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>轨迹回放<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="historyCard2D.html">平面视图</a></li>
+            <li><a href="historyCard3D.html">立体视图</a></li>
+            <li><a href="historyHeatMap.html">轨迹热力图</a></li>
+            <li><a href="historyTest.html">历史查询</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>地图管理<span class="glyphicon glyphicon-chevron-down"></span></h4>
+        <ul class="ul_show">
+            <li><a href="sceneBuilding.html" class="active">场景建筑</a></li>
+            <li><a href="map.html">地图设置</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>电子围栏<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="fenceAlarm.html">警示信息</a></li>
+            <li><a href="staticFence.html">静态围栏</a></li>
+            <li><a href="ruleAdmin.html">规则管理</a></li>
+            <li><a href="dynamicFence.html">动态围栏</a></li>
+            <li><a href="areaSet.html">障碍物设置</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>设备管理<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="alarmCall.html">呼叫求救</a></li>
+            <li><a href="lowerPower.html">欠压提醒</a></li>
+            <li><a href="cardInfo.html">卡号列表</a></li>
+            <li><a href="camera.html">摄像头管理</a></li>
+            <li><a href="nvrDevice.html">录像机管理</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>拓展功能<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="attendance.html">考勤报表</a></li>
+            <li><a href="systemConfig.html">系统配置</a></li>
+        </ul>
+    </div>
+</div>
+
+<!--修改用户名和密码模态框-->
+<div class="modal fade" id="modal_modify_user" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>修改用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="input_modify_user_name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">旧密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_old">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_new">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">确定密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_again">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" id="button_modify_user_save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--增加，删除，更新涉及的一些弹出框-->
+<div class="modal fade" id="modal_new_scene" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">新增场景</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="new_name" placeholder="只允许输入20个字符!">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">描述</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="new_describe">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-default" id="create_save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_update_scene" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">修改场景</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="edit_name" placeholder="只允许输入20个字符!">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">描述</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="edit_describe">
+                        </div>
+                    </div>
+                </form>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-default" id="edit_save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_del_scene"  data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">删除场景</h4>
+            </div>
+            <div class="modal-body">
+                删除后，与该场景相关的数据会一同删除，确定删除?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="del_sure">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_new_building" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">新增建筑</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="new_building_name" placeholder="只允许输入20个字符!">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">所属场景</label>
+                        <div class="col-sm-9">
+                            <select class="form-control buildingSelect" id="create_belong_scene">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">描述</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="new_building_describe">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-default" id="create_building_save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_update_building" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">修改建筑</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">名称</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="edit_building_name" placeholder="只允许输入20个字符!">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">所属场景</label>
+                        <div class="col-sm-9">
+                            <select class="form-control buildingSelect" id="edit_belong_scene" disabled>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">描述</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="edit_building_describe">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-default" id="edit_building_save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_del_building"  data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">删除建筑</h4>
+            </div>
+            <div class="modal-body">
+                删除后，与该建筑相关的数据会一同删除，确定删除?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-default" data-dismiss="modal" id="del_building_sure">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--右侧内容-->
+<div id="main_content">
+
+    <!--案例内容部分,自适应外界容器-->
+    <div id="example">
+        <div style="padding: 5px;height: 100%">
+            <!-- 标签页导航 -->
+            <ul class="nav nav-tabs" role="tablist">
+                <li role="presentation" class="active"><a href="#scene"  role="tab" data-toggle="tab">场景面板</a></li>
+                <li role="presentation"><a href="#building"  role="tab" data-toggle="tab">建筑面板</a></li>
+            </ul>
+
+            <!-- 标签页内容 -->
+            <div class="tab-content">
+                <!--场景页面-->
+                <div role="tabpanel" class="tab-pane active" id="scene">
+                    <div class="page-header">
+                        <button class="btn btn-default" id="create_scene_btn">新增场景</button>
+                    </div>
+                    <div style="height:calc(95% - 100px);overflow-y: auto">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>序号</th><th>名称</th><th>描述</th><th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pages pull-right" style="margin-top: 5px">
+                        <div id="pages_scene"></div>
+                    </div>
+                </div>
+                <!--建筑页面-->
+                <div role="tabpanel" class="tab-pane" id="building">
+                    <div class="page-header">
+                        <div class="input-group"  style="width: 160px;float: left;margin-right: 6px">
+                            <span class="input-group-addon">场景</span>
+                            <select class="form-control" id="show_belong_scene">
+                            </select>
+                        </div>
+                        <button class="btn btn-default" id="create_building_btn">新增建筑</button>
+                    </div>
+                    <div style="height:calc(95% - 100px);overflow-y: auto">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>序号</th><th>名称</th><th>所属场景</th><th>描述</th><th>操作</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="pages pull-right" style="margin-top: 5px">
+                        <div id="pages_building"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/layer/layer.js"></script>
+<script src="lib/mqtt.js"></script>
+<script src="lib/md5.js"></script>
+<script src="src/public/config.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="lib/laypage/laypage.js"></script>
+<script src="src/public/main.js"></script>
+<script src="src/map/scene.js"></script>
+</body>
+</html>

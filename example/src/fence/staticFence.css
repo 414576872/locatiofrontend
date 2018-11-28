@@ -1,0 +1,102 @@
+#area_title{
+    position: absolute;
+    top:10px;
+    right:10px;
+    width:280px;
+    height: 34px;
+    display: block;
+    background-color: white;
+    border: 1px solid #cecece;
+    box-sizing: border-box;
+    border-radius: 4px;
+    text-align: center;
+    line-height: 34px;
+    cursor:pointer;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+#area_list{
+    position: absolute;
+    top:50px;
+    right:10px;
+    width: 280px;
+    height:auto;
+    overflow-y:auto;
+    max-height: 500px;
+    border-radius:4px;
+    background-color: white;
+    border: 1px solid #cecece;
+    box-sizing: border-box;
+    padding: 10px;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+#area_draw_btn{
+    float: left;
+}
+#draw_type_menu{
+    margin-left: 6px;
+    width: 278px;
+    display:none;
+}
+#draw_list{
+    display: none;
+    width: 222px;
+    height:auto;
+    background-color: white;
+    float: left;
+    margin-left: 6px;
+    margin-top: 6px;
+    padding:10px;
+    border-radius: 4px;
+    border: 1px solid #cecece;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+}
+#draw_list label{
+    margin-bottom: 0;
+    font-weight: normal;
+}
+#area_add_jurisdiction_set{
+    display: none;
+}
+.area_add_set_title{
+    border-bottom: 1px solid #e5e5e5;
+}
+.checkbox{
+    margin-top: 0;
+    max-height: 180px;
+    overflow-y: auto;
+}
+.checkbox label{
+    margin:2px 8px 8px 8px;
+
+}
+
+.demo{
+    letter-spacing:-0.9px;
+}
+
+#panel_area_basic_update{
+    position: absolute;
+    left: 4px;
+    top:84px;
+    display: none;
+    width: 222px;
+    height:auto;
+    background-color: white;
+    float: left;
+    margin-left: 6px;
+    margin-top: 6px;
+    padding:10px;
+    border-radius: 4px;
+    border: 1px solid #cecece;
+    box-shadow: 0 2px 2px rgba(0, 0, 0, 0.1);
+    z-index: 10;
+}
+#measure_location:hover{
+    cursor: pointer;
+}
+#back_origin:hover{
+    cursor: pointer;
+}
+#clear_measure_location:hover{
+    cursor: pointer;
+}

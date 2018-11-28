@@ -1,0 +1,186 @@
+/*视频相关样式*/
+.hg_video_container{
+    position: absolute;
+    background-color: white;
+    -moz-user-select:none;
+    -webkit-user-select:none;
+    user-select:none;
+    z-index: 5000;
+}
+.hg_video_container_header{
+    position: relative;
+    cursor: move;
+    width: 100%;
+    height: 40px;
+    background-color: #3a4f63;
+    padding-right: 5px;
+}
+.hg_video_container_header .glyphicon-remove-circle {
+    float: right;
+    color: white;
+    font-size: 2em;
+    margin-top: 5px;
+    cursor: pointer;
+}
+.hg_video_container_header h4{
+    float: left;
+    color: white;
+    margin-left: 20px;
+    width: 70%;
+    overflow: hidden;
+    height: 20px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    -o-text-overflow:ellipsis;
+}
+.hg_video_container_header .h4_change{
+    width: 35%;
+    overflow: hidden;
+    height: 20px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    -o-text-overflow:ellipsis;
+}
+.hg_video_container_header h5{
+    float: left;
+    color: white;
+    margin-left: 10px;
+    font-size: 18px;
+    width: 36%;
+    overflow: hidden;
+    height: 20px;
+    white-space:nowrap;
+    text-overflow:ellipsis;
+    -o-text-overflow:ellipsis;
+}
+.hg_video_play_container{
+    width: 100%;
+    height:calc(100% - 40px);
+    background-color: white;
+    -moz-user-select:none;
+    -webkit-user-select:none;
+    user-select:none;
+}
+.hg_video_container_footer{
+    position: absolute;
+    bottom:0;
+    right:0;
+    color: #6495ED;
+    font-size: 28px;
+    width: 200px;
+    height: 100px;
+}
+.hg_video_container_footer .hg_video_directions{
+    float: left;
+    position: relative;
+    width: 100px;
+    height: 100%;
+}
+.hg_video_container_footer .hg_video_directions .glyphicon-triangle-top{
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    left: calc(50% - 14px);
+}
+.hg_video_container_footer .hg_video_directions .glyphicon-triangle-bottom{
+    cursor: pointer;
+    position: absolute;
+    top:calc(100% - 28px);
+    left: calc(50% - 14px);
+}
+.hg_video_container_footer .hg_video_directions .glyphicon-triangle-left{
+    cursor: pointer;
+    position: absolute;
+    top:calc(50% - 14px);
+    left: 0;
+}
+.hg_video_container_footer .hg_video_directions .glyphicon-triangle-right{
+    cursor: pointer;
+    position: absolute;
+    top:calc(50% - 14px);
+    right: 0;
+}
+.hg_video_container_footer .hg_video_buttons{
+    float: left;
+    width: 90px;
+    height: 100%;
+    margin-left: 10px;
+    padding: 10px 10px 10px 0;
+}
+.hg_video_container_footer .hg_video_buttons .glyphicon-plus-sign{
+    cursor: pointer;
+    margin-right: 20px;
+}
+.hg_video_container_footer .hg_video_buttons .glyphicon-minus-sign{
+    cursor: pointer;
+}
+.hg_video_container_footer .hg_video_buttons .glyphicon-camera{
+    cursor: pointer;
+    margin-top: 5px;
+    margin-right: 23px;
+}
+.hg_video_container_footer .hg_video_buttons .glyphicon-facetime-video{
+    cursor: pointer;
+    margin-top: 10px;
+}
+.direction{
+    color: #228B22;
+}
+
+/*这里是重点*/
+.heart {
+    -webkit-animation: twinkle 500ms ease-out infinite alternate;
+    -moz-animation: twinkle 500ms ease-out infinite alternate;
+    -o-animation: twinkle 500ms ease-out infinite alternate;
+    /*这里使用了呼吸动画*/
+    animation: twinkle 500ms ease-out infinite alternate;
+}
+
+/*以下定义动画帧*/
+@-webkit-keyframes twinkle {
+    0% {
+        color: #eee;
+    }
+    100% {
+        color: #228B22;
+    }
+}
+
+@-moz-keyframes twinkle {
+    0% {
+        border-color: #eee;
+    }
+    100% {
+        color: #228B22;
+    }
+}
+
+@-o-keyframes twinkle {
+    0% {
+        border-color: #eee;
+    }
+    100% {
+        color: #228B22;
+    }
+}
+
+@keyframes twinkle {
+    0% {
+        border-color: #eee;
+    }
+    100% {
+        color: #228B22;
+    }
+}
+.mouse_div{
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: -10px;
+    bottom: -10px;
+    cursor: nw-resize;
+}
+.video_width_change{
+    top:0px !important;
+    left:0px !important;
+}

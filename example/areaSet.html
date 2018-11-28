@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="img/favicon.png"/>
+    <title></title>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="lib/minicolors/jquery.minicolors.css">
+    <link rel="stylesheet" href="../2dSdk/HG2DMap.min.css">
+    <link rel="stylesheet" href="src/public/main.css" />
+    <link rel="stylesheet" href="src/fence/staticFence.css" />
+</head>
+<body>
+<!--新的报警-->
+<div class="new_alarm_info">
+    <div class="left_icon">
+        <img src="./img/alarm_icon.png" alt="">
+    </div>
+    <div class="right_alarm">
+        <div class="real_content" id="new_alarm_text">
+            <p></p>
+        </div>
+        <div class="all_buttons">
+            <div class="close_button">
+                <span class="glyphicon glyphicon-remove"></span>
+            </div>
+            <div class="click_button" id="event_buttons">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--上边栏-->
+<header class="header">
+    <h3 class="system_name"></h3>
+    <div class="login_info">
+        <div class="bell_container">
+            <span class="glyphicon glyphicon-bell"></span>
+            <!--<span class="alarm_number"></span>-->
+            <ul class="alarm_list"></ul>
+        </div>
+        <a href="#" class="modify_user"><img src="img/icon/userEdit.png"></a>
+        <a href="#" class="login_out"><img src="img/icon/logOut.png"></a>
+    </div>
+</header>
+<!--左侧边导航栏-->
+<div id="main_nav">
+    <div>
+        <h4>实时显示<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="realTime2D.html">平面视图</a></li>
+            <li><a href="realTime3D.html">立体视图</a></li>
+            <li><a href="realTimeList.html">列表视图</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>轨迹回放<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="historyCard2D.html">平面视图</a></li>
+            <li><a href="historyCard3D.html">立体视图</a></li>
+            <li><a href="historyHeatMap.html">轨迹热力图</a></li>
+            <li><a href="historyTest.html">历史查询</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>地图管理<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="sceneBuilding.html">场景建筑</a></li>
+            <li><a href="map.html">地图设置</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>电子围栏<span class="glyphicon glyphicon-chevron-down"></span></h4>
+        <ul class="ul_show">
+            <li><a href="fenceAlarm.html">警示信息</a></li>
+            <li><a href="staticFence.html">静态围栏</a></li>
+            <li><a href="ruleAdmin.html">规则管理</a></li>
+            <li><a href="dynamicFence.html">动态围栏</a></li>
+            <li><a href="areaSet.html" class="active">障碍物设置</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>设备管理<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="alarmCall.html">呼叫求救</a></li>
+            <li><a href="lowerPower.html">欠压提醒</a></li>
+            <li><a href="cardInfo.html">卡号列表</a></li>
+            <li><a href="camera.html">摄像头管理</a></li>
+            <li><a href="nvrDevice.html">录像机管理</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>拓展功能<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="attendance.html">考勤报表</a></li>
+            <li><a href="systemConfig.html">系统配置</a></li>
+        </ul>
+    </div>
+</div>
+
+<!--修改用户名和密码模态框-->
+<div class="modal fade" id="modal_modify_user" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>修改用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="input_modify_user_name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">旧密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_old">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_new">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">确定密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_again">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" id="button_modify_user_save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--新增障碍物区域 绘画完成后的设置菜单-->
+<div class="modal fade" id="modal_area_add_set" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>新增障碍物区域</h4>
+            </div>
+            <div id="area_add_basic_set">
+                <div class="modal-body">
+                    <div class="row" style="margin-top: 20px">
+                        <div class="form-group col-md-6">
+                            <label>区域名称</label>
+                            <input type="text" class="form-control" id="input_area_name_add">
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>区域类型</label>
+                            <select  class="form-control" id="select_area_type_add">
+                                <option value="2">障碍物区域</option>
+                                <option value="1">活动区域</option>
+                            </select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>起始高度</label>
+                            <input type="text" class="form-control" id="input_area_z_start_add" disabled>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label>终止高度</label>
+                            <input type="text" class="form-control" id="input_area_z_end_add" disabled>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="modal-footer">
+                    <button class="btn btn-default" data-dismiss="modal" id="button_area_add_cancel">取消</button>
+                    <button class="btn btn-default" id="button_area_add_save">保存</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--是否删除障碍物区域-->
+<div class="modal fade" id="modal_area_delete" data-backdrop=false>
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>删除障碍物区域</h4>
+            </div>
+            <div class="modal-body">
+                删除的数据不可恢复,请确定.
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" >取消</button>
+                <button class="btn btn-default" data-dismiss="modal" id="button_area_delete_save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--正在绘制中 是否放弃绘制-->
+<div class="modal fade" id="modal_area_drawing" data-backdrop=false>
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>放弃绘制区域</h4>
+            </div>
+            <div class="modal-body">
+                正在绘制中,是否放弃绘制?
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" data-dismiss="modal" id="button_area_drawing_sure">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--正在修改中 是否放弃修改-->
+<div class="modal fade" id="modal_area_editing" data-backdrop=false>
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>放弃修改区域</h4>
+            </div>
+            <div class="modal-body">
+                正在修改中,是否放弃修改?
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" >取消</button>
+                <button class="btn btn-default" data-dismiss="modal" id="button_area_editing_sure">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--预览障碍物区域图片-->
+<div class="modal fade" id="modal_show_img" data-backdrop=false>
+    <div class="modal-dialog" role="document" style="width: 1100px; ">
+        <div class="modal-content" style="width: 1110px;height: 830px;">
+            <div class="modal-body">
+                <img alt="pic" width="1080px" height="720px">
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal" >关闭</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--右侧内容-->
+<div id="main_content">
+    <!--案例内容部分,自适应外界容器-->
+    <div id="example">
+        <!--放置地图的容器-->
+        <div id="map">
+            <!--弹出信息放置的容器-->
+            <div id="popup"></div>
+        </div>
+        <!--地图左下角 测量工具-->
+        <div style="position: absolute;bottom:130px;left:10px">
+            <img src="img/mapStaff.png" alt="pic" style="width: 23px" id="measure_location">
+            <img src="img/delete.png" alt="pic" id="clear_measure_location" style="display: none">
+        </div>
+        <!--地图左下角 回到原点-->
+        <div style="position: absolute;bottom:100px;left:10px">
+            <img src="img/backCenter.png" alt="pic" style="width: 23px" id="back_origin">
+        </div>
+        <!--地图左下角 旋转-->
+        <div style="position: absolute;bottom:160px;left:10px;cursor: pointer;">
+            <img src="img/rotate.png" alt="pic" style="width: 23px" id="rotate">
+        </div>
+        <!--载入时的loading图标-->
+        <div id="loading_img">
+            <div class="progress_bar">
+                <img src="img/loading.gif">
+                <div class="progress_bar_bottom">
+                    <div class="progress_bar_top">
+                    </div>
+                </div>
+                <p></p>
+            </div>
+        </div>
+        <!--切换地图和新增障碍物区域-->
+        <div class="left_menu">
+            <div class="input-group shadow" style="width: 250px;">
+                <span class="input-group-addon">地图</span>
+                <select class="form-control" id="floor_select">
+                </select>
+            </div>
+            <button class="btn btn-default shadow" id="area_draw_btn">新增障碍物区域</button>
+            <div style="width:280px;float: left">
+                <div class="input-group shadow" id="draw_type_menu">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" id="draw_type">类型<span class="caret"></span></button>
+                        <ul class="dropdown-menu">
+                            <li><a href="#" id="draw_polygon">多边形</a></li>
+                        </ul>
+                    </div>
+                    <input type="text" class="form-control" disabled id="draw_info" value="请选择需要绘制的类型">
+                    <div class="input-group-btn">
+                        <button type="button" class="btn btn-default" id="draw_cancel">取消</button>
+                    </div>
+                </div>
+                <div id="draw_list">
+                    <h4 class="text-center">已绘制的图形</h4>
+                    <div class="form-group" style="margin-top: 10px">
+                        <label >区域颜色</label>
+                        <input type="text" id="area_color_set" class="form-control demo" data-format="rgb" data-opacity=".5" value="rgba(52, 64, 158, 0.5)">
+                    </div>
+                    <button class="btn btn-default pull-right" id="button_area_add_set">保存</button>
+                    <button class="btn btn-default pull-right" id="draw_list_cancel" style="margin-right: 4px">取消</button>
+
+                </div>
+            </div>
+        </div>
+
+        <!--修改障碍物区域-->
+        <div id="panel_area_basic_update">
+            <h4 class="text-center">修改障碍物区域</h4>
+            <div class="form-group" style="margin-top: 10px">
+                <label >区域颜色</label>
+                <input type="text" id="input_area_color_update" class="form-control demo" data-format="rgb" data-opacity=".5" value="rgba(52, 64, 158, 0.5)">
+            </div>
+            <div class="form-group">
+                <label >区域名称</label>
+                <input type="text" id="input_area_name_update" class="form-control">
+            </div>
+            <div class="form-group">
+                <label >区域类型</label>
+                <select  id="select_area_type_update" class="form-control">
+                    <option value="2">障碍物区域</option>
+                    <option value="1">活动区域</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label >起始高度</label>
+                <input type="text" id="input_area_z_start_update" class="form-control" disabled>
+            </div>
+            <div class="form-group">
+                <label >终止高度</label>
+                <input type="text" id="input_area_z_end_update" class="form-control" disabled>
+            </div>
+            <div class="form-group">
+                <label >使用状态</label>
+                <select id="select_area_is_use_update" class="form-control">
+                    <option value="1">启用</option>
+                    <option value="0">停用</option>
+                </select>
+            </div>
+            <button class="btn btn-default pull-right" id="button_area_basic_update_save">保存</button>
+            <button class="btn btn-default pull-right" id="button_area_basic_update_cancel" style="margin-right: 4px">取消</button>
+        </div>
+
+        <!--障碍物区域列表显示-->
+        <div id="area_title">
+            障碍物区域列表<i class="glyphicon glyphicon-chevron-down" data-id="area"></i>
+        </div>
+        <div id="area_list">
+            <div style="max-height: 400px;overflow-y:auto;">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th><input type="checkbox"></th><th>名称</th><th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table_area">
+                    </tbody>
+                </table>
+            </div>
+            <p id="show_img" style="margin-bottom: 0px;margin-top: 10px;width: 80%;display: inline-block;cursor: pointer;color: #0099ff;">预览障碍物区域图片</p>
+        </div>
+    </div>
+</div>
+<script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/layer/layer.js"></script>
+<script src="lib/mqtt.js"></script>
+<script src="lib/md5.js"></script>
+<script src="src/public/config.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="lib/minicolors/jquery.minicolors.js"></script>
+<script src="../2dSdk/HG2DMap.min.js"></script>
+<script src="src/public/main.js"></script>
+<script src="src/fence/areaSet.js"></script>
+</body>
+</html>

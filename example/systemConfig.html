@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="img/favicon.png"/>
+    <title></title>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" href="src/public/main.css" />
+</head>
+<body>
+<!--新的报警-->
+<div class="new_alarm_info">
+    <div class="left_icon">
+        <img src="./img/alarm_icon.png" alt="">
+    </div>
+    <div class="right_alarm">
+        <div class="real_content" id="new_alarm_text">
+            <p></p>
+        </div>
+        <div class="all_buttons">
+            <div class="close_button">
+                <span class="glyphicon glyphicon-remove"></span>
+            </div>
+            <div class="click_button" id="event_buttons">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--上边栏-->
+<header class="header">
+    <h3 class="system_name"></h3>
+    <div class="login_info">
+        <div class="bell_container">
+            <span class="glyphicon glyphicon-bell"></span>
+            <!--<span class="alarm_number"></span>-->
+            <ul class="alarm_list"></ul>
+        </div>
+        <a href="#" class="modify_user"><img src="img/icon/userEdit.png"></a>
+        <a href="#" class="login_out"><img src="img/icon/logOut.png"></a>
+    </div>
+</header>
+<!--左侧边导航栏-->
+<div id="main_nav">
+    <div>
+        <h4>实时显示<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="realTime2D.html">平面视图</a></li>
+            <li><a href="realTime3D.html">立体视图</a></li>
+            <li><a href="realTimeList.html">列表视图</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>轨迹回放<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="historyCard2D.html">平面视图</a></li>
+            <li><a href="historyCard3D.html">立体视图</a></li>
+            <li><a href="historyHeatMap.html">轨迹热力图</a></li>
+            <li><a href="historyTest.html">历史查询</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>地图管理<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="sceneBuilding.html">场景建筑</a></li>
+            <li><a href="map.html">地图设置</a></li>
+
+        </ul>
+    </div>
+    <div>
+        <h4>电子围栏<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="fenceAlarm.html">警示信息</a></li>
+            <li><a href="staticFence.html">静态围栏</a></li>
+            <li><a href="ruleAdmin.html">规则管理</a></li>
+            <li><a href="dynamicFence.html">动态围栏</a></li>
+            <li><a href="areaSet.html">障碍物设置</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>设备管理<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="alarmCall.html">呼叫求救</a></li>
+            <li><a href="lowerPower.html">欠压提醒</a></li>
+            <li><a href="cardInfo.html">卡号列表</a></li>
+            <li><a href="camera.html">摄像头管理</a></li>
+            <li><a href="nvrDevice.html">录像机管理</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>拓展功能<span class="glyphicon glyphicon-chevron-down"></span></h4>
+        <ul class="ul_show">
+            <li><a href="attendance.html">考勤报表</a></li>
+            <li><a href="systemConfig.html" class="active">系统配置</a></li>
+        </ul>
+    </div>
+</div>
+
+<!--修改用户名和密码模态框-->
+<div class="modal fade" id="modal_modify_user" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>修改用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="input_modify_user_name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">旧密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_old">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_new">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">确定密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_again">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" id="button_modify_user_save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--修改配置模态框-->
+<div class="modal fade" id="modal_modify_config" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>修改配置</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label id="label_modify_config_name">Email address</label>
+                    <input type="text" class="form-control" id="input_modify_config_value">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" id="button_modify_config_save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal_add_penetrate" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>新增内外网穿透配置</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="add_target_address">内网穿透地址</label>
+                    <input type="text" class="form-control" id="add_target_address" placeholder="请输入内网穿透地址">
+                </div>
+                <div class="form-group">
+                    <label for="add_target_address">内部通信端口</label>
+                    <input type="text" class="form-control" id="add_master_address" placeholder="请输入内部通信端口">
+                </div>
+                <div class="form-group">
+                    <label for="add_target_address">外部访问端口</label>
+                    <input type="text" class="form-control" id="add_customer_port" placeholder="请输入外部访问端口">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" id="confirm_add_penetrate">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal_update_penetrate" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>修改内外网穿透配置</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label for="target_address">内网穿透地址</label>
+                    <input type="text" class="form-control" id="target_address" placeholder="请输入内网穿透地址">
+                </div>
+                <div class="form-group">
+                    <label for="master_address">内部通信端口</label>
+                    <input type="text" class="form-control" id="master_address" placeholder="请输入内部通信端口">
+                </div>
+                <div class="form-group">
+                    <label for="add_target_address">外部访问端口</label>
+                    <input type="text" class="form-control" id="customer_port" placeholder="请输入外部访问端口">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" id="confirm_update_penetrate">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="modal_delete_penetrate" data-backdrop=false>
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>删除信息</h4>
+            </div>
+            <div class="modal-body">
+                是否确定删除该条信息
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" data-dismiss="modal" id="confirm_delete_penetrate">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_restore_default" data-backdrop=false>
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>恢复默认配置</h4>
+            </div>
+            <div class="modal-body">
+                恢复默认会清除用户配置，请谨慎操作。
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" data-dismiss="modal" id="btn_restore_default_sure">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--右侧内容-->
+<div id="main_content">
+    <div id="example">
+        <div class="example_div">
+            <div style="height: 100%">
+                <div style="height: 75%;overflow-y: auto">
+                    <div style="width: 100%;height: auto;border-bottom: 1px solid #eeeeee;margin-bottom: 20px;">
+                        <h3 style="display: inline-block;margin-bottom: 16px">系统配置</h3>
+                        <button class="btn btn-default" id="btn_restore_default" style="padding: 4px 8px;margin-top: -8px;margin-left: 10px" >恢复默认配置</button>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>序号</th><th>配置项</th><th>数值</th><th>描述</th><th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="table_sys_config">
+
+                        </tbody>
+                    </table>
+                </div>
+                <div style="height: 25%;overflow-y: auto">
+                    <div style="width: 100%;height: auto;border-bottom: 1px solid #eeeeee;margin-bottom: 20px;">
+                        <h3 style="display: inline-block;margin-bottom: 16px">内外网穿透配置</h3>
+                        <button class="btn btn-default" id="add_penetrate" style="padding: 4px 8px;margin-top: -8px;margin-left: 10px">新增</button>
+                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th>序号</th><th>内网穿透地址</th><th>内部通信端口</th><th>外部访问端口</th><th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="table_penetrate">
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/layer/layer.js"></script>
+<script src="lib/mqtt.js"></script>
+<script src="lib/md5.js"></script>
+<script src="src/public/config.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="src/public/main.js"></script>
+<script src="src/extension/systemConfig.js"></script>
+</body>
+</html>

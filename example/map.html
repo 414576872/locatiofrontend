@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="img/favicon.png"/>
+    <title></title>
+    <link rel="stylesheet" href="../2dSdk/HG2DMap.min.css">
+    <link rel="stylesheet"  href="lib/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet"  href="lib/laypage/skin/laypage.css"/>
+    <link rel="stylesheet"  href="lib/webuploader/webuploader.css"/>
+    <link rel="stylesheet"  href="src/public/main.css" />
+    <link rel="stylesheet"  href="src/map/map.css" />
+</head>
+<body>
+<!--新的报警-->
+<div class="new_alarm_info">
+    <div class="left_icon">
+        <img src="./img/alarm_icon.png" alt="">
+    </div>
+    <div class="right_alarm">
+        <div class="real_content" id="new_alarm_text">
+            <p></p>
+        </div>
+        <div class="all_buttons">
+            <div class="close_button">
+                <span class="glyphicon glyphicon-remove"></span>
+            </div>
+            <div class="click_button" id="event_buttons">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--上边栏-->
+<header class="header">
+    <h3 class="system_name"></h3>
+    <div class="login_info">
+        <div class="bell_container">
+            <span class="glyphicon glyphicon-bell"></span>
+            <!--<span class="alarm_number"></span>-->
+            <ul class="alarm_list"></ul>
+        </div>
+        <a href="#" class="modify_user"><img src="img/icon/userEdit.png"></a>
+        <a href="#" class="login_out"><img src="img/icon/logOut.png"></a>
+    </div>
+</header>
+<!--左侧边导航栏-->
+<div id="main_nav">
+    <div>
+        <h4>实时显示<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="realTime2D.html">平面视图</a></li>
+            <li><a href="realTime3D.html">立体视图</a></li>
+            <li><a href="realTimeList.html">列表视图</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>轨迹回放<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="historyCard2D.html">平面视图</a></li>
+            <li><a href="historyCard3D.html">立体视图</a></li>
+            <li><a href="historyHeatMap.html">轨迹热力图</a></li>
+            <li><a href="historyTest.html">历史查询</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>地图管理<span class="glyphicon glyphicon-chevron-down"></span></h4>
+        <ul class="ul_show">
+            <li><a href="sceneBuilding.html">场景建筑</a></li>
+            <li><a href="map.html" class="active">地图设置</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>电子围栏<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="fenceAlarm.html">警示信息</a></li>
+            <li><a href="staticFence.html">静态围栏</a></li>
+            <li><a href="ruleAdmin.html">规则管理</a></li>
+            <li><a href="dynamicFence.html">动态围栏</a></li>
+            <li><a href="areaSet.html">障碍物设置</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>设备管理<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="alarmCall.html">呼叫求救</a></li>
+            <li><a href="lowerPower.html">欠压提醒</a></li>
+            <li><a href="cardInfo.html">卡号列表</a></li>
+            <li><a href="camera.html">摄像头管理</a></li>
+            <li><a href="nvrDevice.html">录像机管理</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>拓展功能<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="attendance.html">考勤报表</a></li>
+            <li><a href="systemConfig.html">系统配置</a></li>
+        </ul>
+    </div>
+</div>
+
+<!--修改用户名和密码模态框-->
+<div class="modal fade" id="modal_modify_user" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>修改用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="input_modify_user_name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">旧密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_old">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_new">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">确定密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_again">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" id="button_modify_user_save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--新增，更新，删除楼层的模态框-->
+<div class="modal fade" id="modal_add_map" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="add_text">新增楼层</h4>
+                <h4 class="edit_text">修改楼层</h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="add_floor_name">名称</label>
+                        <input type="text" class="form-control" id="add_floor_name" placeholder="只允许输入20个字符!">
+                    </div>
+                    <div class="form-group">
+                        <label for="add_floor_start">起始高度</label>
+                        <input type="text" class="form-control" id="add_floor_start" >
+                    </div>
+                    <div class="form-group">
+                        <label for="add_floor_end">终止高度</label>
+                        <input type="text" class="form-control" id="add_floor_end" >
+                    </div>
+                    <div class="form-group" id="map_zoom" style="display: none">
+                        <label for="add_map_zoom">地图缩放比</label>
+                        <input type="text" class="form-control" id="add_map_zoom" placeholder="自适应">
+                    </div>
+                    <div class="form-group" id="center_view" style="display: none">
+                        <label for="add_map_zoom">地图中心视点</label>
+                        <div>
+                            <input type="text" class="form-control" placeholder="自适应" style="width:49%;display:inline" id="center_x">
+                            <input type="text" class="form-control" placeholder="自适应" style="width:50%;display:inline" id="center_y">
+                        </div>
+                    </div>
+                    <div class="form-group" id="drag_distance" style="display: none">
+                        <label for="add_map_zoom">离地图中心视点的拖放倍数(以地图的宽和高为比)</label>
+                        <input type="text" class="form-control" placeholder="默认1" id="drag_times">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" id="save_file">保存</button>
+                <button class="btn btn-default" id="edit_save_file">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_uploader_map" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>上传地图</h4>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-12" id="all_text_tip">
+                        <span id="step_one"><span class="num_style">1</span>选择文件. . .</span>
+                        <span id="step_two"><span class="num_style">2</span>确定长宽. . .</span>
+                        <span id="step_three"><span class="num_style">3</span>建立坐标. . .</span>
+                        <span id="step_four"><span class="num_style">4</span>上传地图</span>
+                    </div>
+                    <div class="wu-example col-md-12">
+                        <div class="btns">
+                            <div id="picker">选择地图文件</div>
+                        </div>
+                        <!--用来存放文件信息-->
+                        <div id="thelist" class="uploader-list" style="position: absolute;top:0px;left: 180px"></div>
+                    </div>
+                    <div class="col-md-12" id="image_map_location">
+                        <div class="form-group">
+                            <label for="add_map_zoom">请直接输入或点击'测量'得到地图长宽，然后点击'确定'确定地图坐标</label>
+                            <div>
+                                <input type="text" class="form-control" placeholder="地图长度(m)" style="width:20%;display:inline" id="map_width">
+                                <input type="text" class="form-control" placeholder="地图宽度(m)" style="width:20%;display:inline" id="map_height">
+                                <button class="btn btn-info" id="map_measure" style="height: 40px;">测量</button>
+                                <button class="btn btn-info" id="sure_up" style="height: 40px;">确定</button>
+                            </div>
+                        </div>
+                        <div class="form-group" id="map_coordinate_origin" style="display:none">
+                            <label>请点击选择一个点并输入地图偏移量(横为x轴，纵为y轴)</label>
+                            <div>
+                                <input type="text" class="form-control" value="0" style="width:20%;display:inline" id="coordinate_origin_x" placeholder="x(m)">
+                                <input type="text" class="form-control" value="0" style="width:20%;display:inline" id="coordinate_origin_y" placeholder="y(m)">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div id="map_tool"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" id="up_map">上传</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_map_length" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>地图测量</h4>
+            </div>
+            <div class="modal-body">
+                <div class="form-group">
+                    <label>请输入线的实际长度</label>
+                    <div>
+                        <input type="text" class="form-control" placeholder="长度(m)" style="width:49%;display:inline" id="real_length">
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" id="sure_length">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="modal_del_map"  data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title" >删除该楼层</h4>
+            </div>
+            <div class="modal-body">
+                删除后，与该楼层相关的数据会一同删除，确定删除?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+                <button type="button" class="btn btn-default" id="confirm_delete_floor">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--右侧内容-->
+<div id="main_content">
+    <!--案例内容部分,自适应外界容器-->
+    <div id="example">
+        <div style="padding: 5px;height: 100%">
+            <div class="page-header">
+                <div class="input-group">
+                    <span class="input-group-addon">场景</span>
+                    <select class="form-control" id="select_scene"></select>
+                </div>
+                <div class="input-group">
+                    <span class="input-group-addon">建筑</span>
+                    <select class="form-control" id="select_building"></select>
+                </div>
+                <button class="btn btn-default" id="btn_to_add_floor">新增楼层</button>
+            </div>
+
+            <div class="col-lg-5" style="height:100%">
+                <div id="table_div">
+                    <table class="table" id="table_for_floors">
+                        <thead><tr><th>序号</th><th>名称</th><th>起始高度</th><th>终止高度</th><th>二维地图</th><th>三维地图</th><th>操作</th></tr></thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+                <div class="pages pull-right" style="margin-top: 5px">
+                    <div id="pages"></div>
+                </div>
+            </div>
+            <div class="col-lg-7" style="height:100%;position: relative">
+                <div style="width: 100%;height: calc(77% - 100px);position: absolute;">
+                    <div id="map">
+                    </div>
+                    <!--载入时的loading图标-->
+                    <div id="loading_img" style="z-index: 1000">
+                        <div class="progress_bar">
+                            <img src="img/loading.gif">
+                            <div class="progress_bar_bottom">
+                                <div class="progress_bar_top">
+                                </div>
+                            </div>
+                            <p></p>
+                        </div>
+                    </div>
+                    <div id="show_zoom" style="position: absolute;top:20px;left:30px;display: none">
+                        <div class="input-group">
+                            <span class="input-group-addon">地图缩放比</span>
+                            <input class="form-control" type="text" disabled/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/layer/layer.js"></script>
+<script src="lib/mqtt.js"></script>
+<script src="lib/md5.js"></script>
+<script src="src/public/config.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="lib/laypage/laypage.js"></script>
+<script src="lib/webuploader/webuploader.js"></script>
+<script src="../2dSdk/HG2DMap.min.js"></script>
+<script src="../3dSdk/HG3DMap.min.js"></script>
+<script src="lib/laypage/laypage.js"></script>
+<script src="src/public/main.js"></script>
+<script src="src/map/map.js"></script>
+</body>
+</html>

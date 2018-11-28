@@ -1,0 +1,1488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="img/favicon.png"/>
+    <title></title>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css"/>
+    <link rel="stylesheet" href="src/public/main.css" />
+    <link rel="stylesheet" href="src/fence/dynamicFence.css" />
+</head>
+<body>
+<!--新的报警-->
+<div class="new_alarm_info">
+    <div class="left_icon">
+        <img src="./img/alarm_icon.png" alt="">
+    </div>
+    <div class="right_alarm">
+        <div class="real_content" id="new_alarm_text">
+            <p></p>
+        </div>
+        <div class="all_buttons">
+            <div class="close_button">
+                <span class="glyphicon glyphicon-remove"></span>
+            </div>
+            <div class="click_button" id="event_buttons">
+
+            </div>
+        </div>
+    </div>
+</div>
+<!--上边栏-->
+<header class="header">
+    <h3 class="system_name"></h3>
+    <div class="login_info">
+        <div class="bell_container">
+            <span class="glyphicon glyphicon-bell"></span>
+            <!--<span class="alarm_number"></span>-->
+            <ul class="alarm_list"></ul>
+        </div>
+        <a href="#" class="modify_user"><img src="img/icon/userEdit.png"></a>
+        <a href="#" class="login_out"><img src="img/icon/logOut.png"></a>
+    </div>
+</header>
+<!--左侧边导航栏-->
+<div id="main_nav">
+    <div>
+        <h4>实时显示<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="realTime2D.html">平面视图</a></li>
+            <li><a href="realTime3D.html">立体视图</a></li>
+            <li><a href="realTimeList.html">列表视图</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>轨迹回放<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="historyCard2D.html">平面视图</a></li>
+            <li><a href="historyCard3D.html">立体视图</a></li>
+            <li><a href="historyHeatMap.html">轨迹热力图</a></li>
+            <li><a href="historyTest.html">历史查询</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>地图管理<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="sceneBuilding.html">场景建筑</a></li>
+            <li><a href="map.html">地图设置</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>电子围栏<span class="glyphicon glyphicon-chevron-down"></span></h4>
+        <ul class="ul_show">
+            <li><a href="fenceAlarm.html">警示信息</a></li>
+            <li><a href="staticFence.html">静态围栏</a></li>
+            <li><a href="ruleAdmin.html">规则管理</a></li>
+            <li><a href="dynamicFence.html" class="active">动态围栏</a></li>
+            <li><a href="areaSet.html">障碍物设置</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>设备管理<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="alarmCall.html">呼叫求救</a></li>
+            <li><a href="lowerPower.html">欠压提醒</a></li>
+            <li><a href="cardInfo.html">卡号列表</a></li>
+            <li><a href="camera.html">摄像头管理</a></li>
+            <li><a href="nvrDevice.html">录像机管理</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>拓展功能<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="attendance.html">考勤报表</a></li>
+            <li><a href="systemConfig.html">系统配置</a></li>
+        </ul>
+    </div>
+</div>
+<!--修改用户名和密码模态框-->
+<div class="modal fade" id="modal_modify_user" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>修改用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="input_modify_user_name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">旧密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_old">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_new">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">确定密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_again">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" id="button_modify_user_save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--陪同编辑弹出框-->
+<div class="modal fade" id="escort_right_side" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4></h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="escort_add_name">名称</label>
+                        <input type="text" class="form-control" id="escort_add_name" >
+                    </div>
+                    <div class="form-group">
+                        <label for="escort_add_radius">陪同距离（单位：米）</label>
+                        <input type="text" class="form-control" id="escort_add_radius"  placeholder="请输入陪同距离">
+                    </div>
+                    <div class="form-group">
+                        <label>被陪同人员</label>
+                        <div class="checkbox" style="margin-bottom: -5px">
+                            <label><input type="checkbox" id="be_escort_persons_all">全选</label>
+                        </div>
+                        <div class="checkbox" id="list_be_escort_persons" style="max-height: 80px;overflow-y: auto;">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>陪同人员</label>
+                        <div class="checkbox" style="margin-bottom: -5px">
+                            <label><input type="checkbox" id="escort_persons_all">全选</label>
+                        </div>
+                        <div class="checkbox" id="list_escort_persons" style="max-height: 80px;overflow-y: auto;">
+                        </div>
+                    </div>
+                    <div class="form-group checkbox">
+                        <label style="margin-left: 0px;font-weight: bold;"><input type="checkbox" id="valid_time">永久有效(有效期)</label>
+                        <div style="height: 34px" id="time_input">
+                            <div class="input-group">
+                                <span class="input-group-addon">开始</span>
+                                <input type="text" class="form-control real_only_white" id="escort_start_data" readonly>
+                            </div>
+
+                            <div class="input-group picker_time" >
+                                <span class="input-group-addon">:</span>
+                                <input type="text" class="form-control real_only_white" id="escort_start_time" readonly>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">结束</span>
+                                <input type="text" class="form-control real_only_white" id="escort_end_data" readonly>
+                            </div>
+                            <div class="input-group picker_time" >
+                                <span class="input-group-addon">:</span>
+                                <input type="text" class="form-control real_only_white" id="escort_end_time" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group checkbox">
+                        <label style="margin-left: 0px;font-weight: bold;padding-left: 0px;">重复时间段</label>
+                        <i class="glyphicon glyphicon-plus" id="time_plus"></i>
+                        <div style="height: 34px;display: none;" id="show_time_select">
+                            <div class="input-group picker_time">
+                                <select  class="form-control" id="start_hour_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                </select>
+                            </div>
+                            <div class="input-group picker_time">
+                                <span class="input-group-addon">:</span>
+                                <select  class="form-control" style="width: 70px;" id="start_minute_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                    <option value="32">32</option>
+                                    <option value="33">33</option>
+                                    <option value="34">34</option>
+                                    <option value="35">35</option>
+                                    <option value="36">36</option>
+                                    <option value="37">37</option>
+                                    <option value="38">38</option>
+                                    <option value="39">39</option>
+                                    <option value="40">40</option>
+                                    <option value="41">41</option>
+                                    <option value="42">42</option>
+                                    <option value="43">43</option>
+                                    <option value="44">44</option>
+                                    <option value="45">45</option>
+                                    <option value="46">46</option>
+                                    <option value="47">47</option>
+                                    <option value="48">48</option>
+                                    <option value="49">49</option>
+                                    <option value="50">50</option>
+                                    <option value="51">51</option>
+                                    <option value="52">52</option>
+                                    <option value="53">53</option>
+                                    <option value="54">54</option>
+                                    <option value="55">55</option>
+                                    <option value="56">56</option>
+                                    <option value="57">57</option>
+                                    <option value="58">58</option>
+                                    <option value="59">59</option>
+                                </select>
+                            </div>
+                            <div class="input-group picker_time">
+                                <span class="input-group-addon">~</span>
+                                <select  class="form-control" style="width: 70px;" id="end_hour_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                </select>
+                            </div>
+                            <div class="input-group picker_time">
+                                <span class="input-group-addon">:</span>
+                                <select  class="form-control" style="width: 70px;" id="end_minute_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                    <option value="32">32</option>
+                                    <option value="33">33</option>
+                                    <option value="34">34</option>
+                                    <option value="35">35</option>
+                                    <option value="36">36</option>
+                                    <option value="37">37</option>
+                                    <option value="38">38</option>
+                                    <option value="39">39</option>
+                                    <option value="40">40</option>
+                                    <option value="41">41</option>
+                                    <option value="42">42</option>
+                                    <option value="43">43</option>
+                                    <option value="44">44</option>
+                                    <option value="45">45</option>
+                                    <option value="46">46</option>
+                                    <option value="47">47</option>
+                                    <option value="48">48</option>
+                                    <option value="49">49</option>
+                                    <option value="50">50</option>
+                                    <option value="51">51</option>
+                                    <option value="52">52</option>
+                                    <option value="53">53</option>
+                                    <option value="54">54</option>
+                                    <option value="55">55</option>
+                                    <option value="56">56</option>
+                                    <option value="57">57</option>
+                                    <option value="58">58</option>
+                                    <option value="59">59</option>
+                                </select>
+                            </div>
+                            <span class="glyphicon glyphicon-remove" style="position: absolute;top:40px;right:185px;color:#f00;"></span>
+                            <span class="glyphicon glyphicon-ok" style="position: absolute;top:40px;right:210px;color: #00BFFF;"></span>
+                        </div>
+                        <div id="time_list" style="margin-top: 5px">
+                        </div>
+                    </div>
+                    <div class="form-group checkbox" id="repeat_week">
+                        <label style="margin-left: 0px;"><input type="checkbox" id="every_day">每天</label>
+                        <div id="week_select">
+                            <button type="button" class="btn btn-default" data-value="0">周一</button>
+                            <button type="button" class="btn btn-default" data-value="1">周二</button>
+                            <button type="button" class="btn btn-default" data-value="2">周三</button>
+                            <button type="button" class="btn btn-default" data-value="3">周四</button>
+                            <button type="button" class="btn btn-default" data-value="4">周五</button>
+                            <button type="button" class="btn btn-default" data-value="5">周六</button>
+                            <button type="button" class="btn btn-default" data-value="6">周日</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="escort_add_status">使用状态</label>
+                        <select class="form-control" id="escort_add_status">
+                            <option value="1">使用</option>
+                            <option value="0">停用</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="escort_add_comment">备注</label>
+                        <input type="text" class="form-control" id="escort_add_comment">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" id="escort_cancel_btn">取消</button>
+                <button class="btn btn-default" id="escort_save_btn">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--离群编辑弹出框-->
+<div class="modal fade" id="leave_right_side" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4></h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="leave_add_name">名称</label>
+                        <input type="text" class="form-control" id="leave_add_name"  placeholder="请输入名称">
+                    </div>
+                    <div class="form-group">
+                        <label for="leave_add_radius">最远距离（单位：米）</label>
+                        <input type="text" class="form-control" id="leave_add_radius"  placeholder="请输入最远距离">
+                    </div>
+                    <div class="form-group">
+                        <label>人员</label>
+                        <div class="checkbox" style="margin-bottom: -5px">
+                            <label><input type="checkbox" id="chose_leave_person_all">全选</label>
+                        </div>
+                        <div class="checkbox" id="list_chose_leave_person" style="max-height: 80px;overflow-y: auto;">
+                        </div>
+                    </div>
+                    <div class="form-group checkbox">
+                        <label style="margin-left: 0px;font-weight: bold;"><input type="checkbox" id="leave_valid_time">永久有效(有效期)</label>
+                        <div style="height: 34px" id="leave_time_input">
+                            <div class="input-group">
+                                <span class="input-group-addon">开始</span>
+                                <input type="text" class="form-control real_only_white" id="leave_start_data" readonly>
+                            </div>
+
+                            <div class="input-group picker_time" >
+                                <span class="input-group-addon">:</span>
+                                <input type="text" class="form-control real_only_white" id="leave_start_time" readonly>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">结束</span>
+                                <input type="text" class="form-control real_only_white" id="leave_end_data" readonly>
+                            </div>
+                            <div class="input-group picker_time" >
+                                <span class="input-group-addon">:</span>
+                                <input type="text" class="form-control real_only_white" id="leave_end_time" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group checkbox">
+                        <label style="margin-left: 0px;font-weight: bold;padding-left: 0px;">重复时间段</label>
+                        <i class="glyphicon glyphicon-plus" id="leave_time_plus"></i>
+                        <div style="height: 34px;display: none;" id="leave_show_time_select">
+                            <div class="input-group picker_time">
+                                <select  class="form-control" id="leave_start_hour_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                </select>
+                            </div>
+                            <div class="input-group picker_time">
+                                <span class="input-group-addon">:</span>
+                                <select  class="form-control" style="width: 70px;" id="leave_start_minute_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                    <option value="32">32</option>
+                                    <option value="33">33</option>
+                                    <option value="34">34</option>
+                                    <option value="35">35</option>
+                                    <option value="36">36</option>
+                                    <option value="37">37</option>
+                                    <option value="38">38</option>
+                                    <option value="39">39</option>
+                                    <option value="40">40</option>
+                                    <option value="41">41</option>
+                                    <option value="42">42</option>
+                                    <option value="43">43</option>
+                                    <option value="44">44</option>
+                                    <option value="45">45</option>
+                                    <option value="46">46</option>
+                                    <option value="47">47</option>
+                                    <option value="48">48</option>
+                                    <option value="49">49</option>
+                                    <option value="50">50</option>
+                                    <option value="51">51</option>
+                                    <option value="52">52</option>
+                                    <option value="53">53</option>
+                                    <option value="54">54</option>
+                                    <option value="55">55</option>
+                                    <option value="56">56</option>
+                                    <option value="57">57</option>
+                                    <option value="58">58</option>
+                                    <option value="59">59</option>
+                                </select>
+                            </div>
+                            <div class="input-group picker_time">
+                                <span class="input-group-addon">~</span>
+                                <select  class="form-control" style="width: 70px;" id="leave_end_hour_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                </select>
+                            </div>
+                            <div class="input-group picker_time">
+                                <span class="input-group-addon">:</span>
+                                <select  class="form-control" style="width: 70px;" id="leave_end_minute_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                    <option value="32">32</option>
+                                    <option value="33">33</option>
+                                    <option value="34">34</option>
+                                    <option value="35">35</option>
+                                    <option value="36">36</option>
+                                    <option value="37">37</option>
+                                    <option value="38">38</option>
+                                    <option value="39">39</option>
+                                    <option value="40">40</option>
+                                    <option value="41">41</option>
+                                    <option value="42">42</option>
+                                    <option value="43">43</option>
+                                    <option value="44">44</option>
+                                    <option value="45">45</option>
+                                    <option value="46">46</option>
+                                    <option value="47">47</option>
+                                    <option value="48">48</option>
+                                    <option value="49">49</option>
+                                    <option value="50">50</option>
+                                    <option value="51">51</option>
+                                    <option value="52">52</option>
+                                    <option value="53">53</option>
+                                    <option value="54">54</option>
+                                    <option value="55">55</option>
+                                    <option value="56">56</option>
+                                    <option value="57">57</option>
+                                    <option value="58">58</option>
+                                    <option value="59">59</option>
+                                </select>
+                            </div>
+                            <span class="glyphicon glyphicon-remove" style="position: absolute;top:40px;right:185px;color:#f00;"></span>
+                            <span class="glyphicon glyphicon-ok" style="position: absolute;top:40px;right:210px;color: #00BFFF;"></span>
+                        </div>
+                        <div id="leave_time_list" style="margin-top: 5px">
+                        </div>
+                    </div>
+                    <div class="form-group checkbox" id="leave_repeat_week">
+                        <label style="margin-left: 0px;"><input type="checkbox" id="leave_every_day">每天</label>
+                        <div id="leave_week_select">
+                            <button type="button" class="btn btn-default" data-value="0">周一</button>
+                            <button type="button" class="btn btn-default" data-value="1">周二</button>
+                            <button type="button" class="btn btn-default" data-value="2">周三</button>
+                            <button type="button" class="btn btn-default" data-value="3">周四</button>
+                            <button type="button" class="btn btn-default" data-value="4">周五</button>
+                            <button type="button" class="btn btn-default" data-value="5">周六</button>
+                            <button type="button" class="btn btn-default" data-value="6">周日</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="leave_add_status">使用状态</label>
+                        <select class="form-control" id="leave_add_status">
+                            <option value="1">使用</option>
+                            <option value="0">停用</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="leave_add_comment">备注</label>
+                        <input type="text" class="form-control" id="leave_add_comment">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" id="leave_cancel_btn">取消</button>
+                <button class="btn btn-default" id="leave_save_btn">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--监护组编辑弹出框-->
+<div class="modal fade" id="custody_right_side" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4></h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label for="custody_add_name">名称</label>
+                        <input type="text" class="form-control" id="custody_add_name"  placeholder="请输入名称">
+                    </div>
+                    <div class="form-group">
+                        <label for="custody_add_card">卡号(以卡号为中心，建立动态围栏)</label>
+                        <input type="text" class="form-control" id="custody_add_card"  placeholder="请输入卡号">
+                    </div>
+                    <div class="form-group">
+                        <label for="custody_add_radius">安全范围（单位：米）</label>
+                        <input type="text" class="form-control" id="custody_add_radius"  placeholder="请输入安全范围">
+                    </div>
+                    <div class="form-group">
+                        <label>人员</label>
+                        <div class="checkbox" style="margin-bottom: -5px">
+                            <label><input type="checkbox" id="chose_custody_person_all">全选</label>
+                        </div>
+                        <div class="checkbox" id="list_chose_custody_person" style="max-height: 80px;overflow-y: auto;">
+                        </div>
+                    </div>
+                    <div class="form-group checkbox">
+                        <label style="margin-left: 0px;font-weight: bold;"><input type="checkbox" id="custody_valid_time">永久有效(有效期)</label>
+                        <div style="height: 34px" id="custody_time_input">
+                            <div class="input-group">
+                                <span class="input-group-addon">开始</span>
+                                <input type="text" class="form-control real_only_white" id="custody_start_data" readonly>
+                            </div>
+
+                            <div class="input-group picker_time" >
+                                <span class="input-group-addon">:</span>
+                                <input type="text" class="form-control real_only_white" id="custody_start_time" readonly>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">结束</span>
+                                <input type="text" class="form-control real_only_white" id="custody_end_data" readonly>
+                            </div>
+                            <div class="input-group picker_time" >
+                                <span class="input-group-addon">:</span>
+                                <input type="text" class="form-control real_only_white" id="custody_end_time" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group checkbox">
+                        <label style="margin-left: 0px;font-weight: bold;padding-left: 0px;">重复时间段</label>
+                        <i class="glyphicon glyphicon-plus" id="custody_time_plus"></i>
+                        <div style="height: 34px;display: none;" id="custody_show_time_select">
+                            <div class="input-group picker_time">
+                                <select  class="form-control" id="custody_start_hour_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                </select>
+                            </div>
+                            <div class="input-group picker_time">
+                                <span class="input-group-addon">:</span>
+                                <select  class="form-control" style="width: 70px;" id="custody_start_minute_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                    <option value="32">32</option>
+                                    <option value="33">33</option>
+                                    <option value="34">34</option>
+                                    <option value="35">35</option>
+                                    <option value="36">36</option>
+                                    <option value="37">37</option>
+                                    <option value="38">38</option>
+                                    <option value="39">39</option>
+                                    <option value="40">40</option>
+                                    <option value="41">41</option>
+                                    <option value="42">42</option>
+                                    <option value="43">43</option>
+                                    <option value="44">44</option>
+                                    <option value="45">45</option>
+                                    <option value="46">46</option>
+                                    <option value="47">47</option>
+                                    <option value="48">48</option>
+                                    <option value="49">49</option>
+                                    <option value="50">50</option>
+                                    <option value="51">51</option>
+                                    <option value="52">52</option>
+                                    <option value="53">53</option>
+                                    <option value="54">54</option>
+                                    <option value="55">55</option>
+                                    <option value="56">56</option>
+                                    <option value="57">57</option>
+                                    <option value="58">58</option>
+                                    <option value="59">59</option>
+                                </select>
+                            </div>
+                            <div class="input-group picker_time">
+                                <span class="input-group-addon">~</span>
+                                <select  class="form-control" style="width: 70px;" id="custody_end_hour_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                </select>
+                            </div>
+                            <div class="input-group picker_time">
+                                <span class="input-group-addon">:</span>
+                                <select  class="form-control" style="width: 70px;" id="custody_end_minute_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                    <option value="32">32</option>
+                                    <option value="33">33</option>
+                                    <option value="34">34</option>
+                                    <option value="35">35</option>
+                                    <option value="36">36</option>
+                                    <option value="37">37</option>
+                                    <option value="38">38</option>
+                                    <option value="39">39</option>
+                                    <option value="40">40</option>
+                                    <option value="41">41</option>
+                                    <option value="42">42</option>
+                                    <option value="43">43</option>
+                                    <option value="44">44</option>
+                                    <option value="45">45</option>
+                                    <option value="46">46</option>
+                                    <option value="47">47</option>
+                                    <option value="48">48</option>
+                                    <option value="49">49</option>
+                                    <option value="50">50</option>
+                                    <option value="51">51</option>
+                                    <option value="52">52</option>
+                                    <option value="53">53</option>
+                                    <option value="54">54</option>
+                                    <option value="55">55</option>
+                                    <option value="56">56</option>
+                                    <option value="57">57</option>
+                                    <option value="58">58</option>
+                                    <option value="59">59</option>
+                                </select>
+                            </div>
+                            <span class="glyphicon glyphicon-remove" style="position: absolute;top:40px;right:185px;color:#f00;"></span>
+                            <span class="glyphicon glyphicon-ok" style="position: absolute;top:40px;right:210px;color: #00BFFF;"></span>
+                        </div>
+                        <div id="custody_time_list" style="margin-top: 5px">
+                        </div>
+                    </div>
+                    <div class="form-group checkbox" id="custody_repeat_week">
+                        <label style="margin-left: 0px;"><input type="checkbox" id="custody_every_day">每天</label>
+                        <div id="custody_week_select">
+                            <button type="button" class="btn btn-default" data-value="0">周一</button>
+                            <button type="button" class="btn btn-default" data-value="1">周二</button>
+                            <button type="button" class="btn btn-default" data-value="2">周三</button>
+                            <button type="button" class="btn btn-default" data-value="3">周四</button>
+                            <button type="button" class="btn btn-default" data-value="4">周五</button>
+                            <button type="button" class="btn btn-default" data-value="5">周六</button>
+                            <button type="button" class="btn btn-default" data-value="6">周日</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="leave_add_status">使用状态</label>
+                        <select class="form-control" id="custody_add_status">
+                            <option value="1">使用</option>
+                            <option value="0">停用</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="leave_add_comment">备注</label>
+                        <input type="text" class="form-control" id="custody_add_comment">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" id="custody_cancel_btn">取消</button>
+                <button class="btn btn-default" id="custody_save_btn">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--危险源编辑弹出框-->
+<div class="modal fade" id="danger_right_side" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4></h4>
+            </div>
+            <div class="modal-body">
+                <form role="form">
+                    <div class="form-group">
+                        <label>名称</label>
+                        <input type="text" class="form-control" id="danger_add_name"  placeholder="请输入名称">
+                    </div>
+                    <div class="form-group">
+                        <label>卡号(以卡号为中心，建立动态围栏)</label>
+                        <input type="text" class="form-control" id="danger_add_card"  placeholder="请输入卡号">
+                    </div>
+                    <div class="form-group">
+                        <label>安全范围（单位：米）</label>
+                        <input type="text" class="form-control" id="danger_add_radius"  placeholder="请输入安全范围">
+                    </div>
+                    <div class="form-group">
+                        <label>靠近不报警人员</label>
+                        <div class="checkbox" style="margin-bottom: -5px;">
+                            <label><input type="checkbox" id="chose_danger_person_all">全选</label>
+                        </div>
+                        <div class="checkbox" id="list_chose_danger_person" style="max-height: 80px;overflow-y: auto;">
+                        </div>
+                    </div>
+                    <div class="form-group checkbox">
+                        <label style="margin-left: 0px;font-weight: bold;"><input type="checkbox" id="danger_valid_time">永久有效(有效期)</label>
+                        <div style="height: 34px" id="danger_time_input">
+                            <div class="input-group">
+                                <span class="input-group-addon">开始</span>
+                                <input type="text" class="form-control real_only_white" id="danger_start_data" readonly>
+                            </div>
+
+                            <div class="input-group picker_time" >
+                                <span class="input-group-addon">:</span>
+                                <input type="text" class="form-control real_only_white" id="danger_start_time" readonly>
+                            </div>
+                            <div class="input-group">
+                                <span class="input-group-addon">结束</span>
+                                <input type="text" class="form-control real_only_white" id="danger_end_data" readonly>
+                            </div>
+                            <div class="input-group picker_time" >
+                                <span class="input-group-addon">:</span>
+                                <input type="text" class="form-control real_only_white" id="danger_end_time" readonly>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group checkbox">
+                        <label style="margin-left: 0px;font-weight: bold;padding-left: 0px;">重复时间段</label>
+                        <i class="glyphicon glyphicon-plus" id="danger_time_plus"></i>
+                        <div style="height: 34px;display: none;" id="danger_show_time_select">
+                            <div class="input-group picker_time">
+                                <select  class="form-control" id="danger_start_hour_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                </select>
+                            </div>
+                            <div class="input-group picker_time">
+                                <span class="input-group-addon">:</span>
+                                <select  class="form-control" style="width: 70px;" id="danger_start_minute_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                    <option value="32">32</option>
+                                    <option value="33">33</option>
+                                    <option value="34">34</option>
+                                    <option value="35">35</option>
+                                    <option value="36">36</option>
+                                    <option value="37">37</option>
+                                    <option value="38">38</option>
+                                    <option value="39">39</option>
+                                    <option value="40">40</option>
+                                    <option value="41">41</option>
+                                    <option value="42">42</option>
+                                    <option value="43">43</option>
+                                    <option value="44">44</option>
+                                    <option value="45">45</option>
+                                    <option value="46">46</option>
+                                    <option value="47">47</option>
+                                    <option value="48">48</option>
+                                    <option value="49">49</option>
+                                    <option value="50">50</option>
+                                    <option value="51">51</option>
+                                    <option value="52">52</option>
+                                    <option value="53">53</option>
+                                    <option value="54">54</option>
+                                    <option value="55">55</option>
+                                    <option value="56">56</option>
+                                    <option value="57">57</option>
+                                    <option value="58">58</option>
+                                    <option value="59">59</option>
+                                </select>
+                            </div>
+                            <div class="input-group picker_time">
+                                <span class="input-group-addon">~</span>
+                                <select  class="form-control" style="width: 70px;" id="danger_end_hour_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                </select>
+                            </div>
+                            <div class="input-group picker_time">
+                                <span class="input-group-addon">:</span>
+                                <select  class="form-control" style="width: 70px;" id="danger_end_minute_time">
+                                    <option value="0">00</option>
+                                    <option value="1">01</option>
+                                    <option value="2">02</option>
+                                    <option value="3">03</option>
+                                    <option value="4">04</option>
+                                    <option value="5">05</option>
+                                    <option value="6">06</option>
+                                    <option value="7">07</option>
+                                    <option value="8">08</option>
+                                    <option value="9">09</option>
+                                    <option value="10">10</option>
+                                    <option value="11">11</option>
+                                    <option value="12">12</option>
+                                    <option value="13">13</option>
+                                    <option value="14">14</option>
+                                    <option value="15">15</option>
+                                    <option value="16">16</option>
+                                    <option value="17">17</option>
+                                    <option value="18">18</option>
+                                    <option value="19">19</option>
+                                    <option value="20">20</option>
+                                    <option value="21">21</option>
+                                    <option value="22">22</option>
+                                    <option value="23">23</option>
+                                    <option value="24">24</option>
+                                    <option value="25">25</option>
+                                    <option value="26">26</option>
+                                    <option value="27">27</option>
+                                    <option value="28">28</option>
+                                    <option value="29">29</option>
+                                    <option value="30">30</option>
+                                    <option value="31">31</option>
+                                    <option value="32">32</option>
+                                    <option value="33">33</option>
+                                    <option value="34">34</option>
+                                    <option value="35">35</option>
+                                    <option value="36">36</option>
+                                    <option value="37">37</option>
+                                    <option value="38">38</option>
+                                    <option value="39">39</option>
+                                    <option value="40">40</option>
+                                    <option value="41">41</option>
+                                    <option value="42">42</option>
+                                    <option value="43">43</option>
+                                    <option value="44">44</option>
+                                    <option value="45">45</option>
+                                    <option value="46">46</option>
+                                    <option value="47">47</option>
+                                    <option value="48">48</option>
+                                    <option value="49">49</option>
+                                    <option value="50">50</option>
+                                    <option value="51">51</option>
+                                    <option value="52">52</option>
+                                    <option value="53">53</option>
+                                    <option value="54">54</option>
+                                    <option value="55">55</option>
+                                    <option value="56">56</option>
+                                    <option value="57">57</option>
+                                    <option value="58">58</option>
+                                    <option value="59">59</option>
+                                </select>
+                            </div>
+                            <span class="glyphicon glyphicon-remove" style="position: absolute;top:40px;right:185px;color:#f00;"></span>
+                            <span class="glyphicon glyphicon-ok" style="position: absolute;top:40px;right:210px;color: #00BFFF;"></span>
+                        </div>
+                        <div id="danger_time_list" style="margin-top: 5px">
+                        </div>
+                    </div>
+                    <div class="form-group checkbox" id="danger_repeat_week">
+                        <label style="margin-left: 0px;"><input type="checkbox" id="danger_every_day">每天</label>
+                        <div id="danger_week_select">
+                            <button type="button" class="btn btn-default" data-value="0">周一</button>
+                            <button type="button" class="btn btn-default" data-value="1">周二</button>
+                            <button type="button" class="btn btn-default" data-value="2">周三</button>
+                            <button type="button" class="btn btn-default" data-value="3">周四</button>
+                            <button type="button" class="btn btn-default" data-value="4">周五</button>
+                            <button type="button" class="btn btn-default" data-value="5">周六</button>
+                            <button type="button" class="btn btn-default" data-value="6">周日</button>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>使用状态</label>
+                        <select class="form-control" id="danger_add_status">
+                            <option value="1">使用</option>
+                            <option value="0">停用</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>备注</label>
+                        <input type="text" class="form-control" id="danger_add_comment">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" id="danger_cancel_btn">取消</button>
+                <button class="btn btn-default" id="danger_save_btn">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--陪同的删除确认模态框-->
+<div class="modal fade" id="modal_delete_escort" data-backdrop=false>
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>删除信息</h4>
+            </div>
+            <div class="modal-body">
+                是否确定删除该条信息
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" data-dismiss="modal" id="confirm_delete_escort">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--离群的删除确认模态框-->
+<div class="modal fade" id="modal_delete_leave" data-backdrop=false>
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>删除信息</h4>
+            </div>
+            <div class="modal-body">
+                是否确定删除该条信息
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" data-dismiss="modal" id="confirm_delete_leave">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--监护组的删除确认模态框-->
+<div class="modal fade" id="modal_delete_custody" data-backdrop=false>
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>删除信息</h4>
+            </div>
+            <div class="modal-body">
+                是否确定删除该条信息
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" data-dismiss="modal" id="confirm_delete_custody">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+<!--危险源的删除确认模态框-->
+<div class="modal fade" id="modal_delete_danger" data-backdrop=false>
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>删除信息</h4>
+            </div>
+            <div class="modal-body">
+                是否确定删除该条信息
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" data-dismiss="modal" id="confirm_delete_danger">确定</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--右侧内容-->
+<div id="main_content">
+    <div class="example_div">
+        <ul class="nav nav-tabs" role="tablist">
+            <li role="presentation" class="active"><a href="#tab_escort" role="tab" data-toggle="tab">陪同设置</a></li>
+            <li role="presentation"><a href="#tab_leave" role="tab" data-toggle="tab">离群设置</a></li>
+            <li role="presentation"><a href="#tab_custody" role="tab" data-toggle="tab">监护组设置</a></li>
+            <li role="presentation"><a href="#tab_danger" role="tab" data-toggle="tab">危险源设置</a></li>
+        </ul>
+        <div  class="tab-content" style="height:calc(100% - 43px);overflow: auto">
+            <!--陪同设置-->
+            <div class="tab-pane fade in active" id="tab_escort" style="height: calc(100% - 10px);z-index: 15">
+                <div class="search_conditions">
+                    <div class="input-group the_same_width">
+                        <span class="input-group-addon">名称</span>
+                        <input type="text" class="form-control" id="escort_name">
+                    </div>
+                    <button type="button" class="btn btn-default the_margin_right" id="escort_search_btn">查询</button>
+                    <button type="button" class="btn btn-default has_auth_handle" id="escort_add_btn">新增陪同</button>
+                </div>
+                <div style="height: calc(100% - 84px);overflow-y: auto">
+                    <table class="table table-striped" id="escort_table">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>名称</th>
+                            <th>陪同范围(米)</th>
+                            <th>有效期</th>
+                            <th>状态</th>
+                            <th>备注</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pages pull-right" style="margin-top: 5px">
+                    <div id="escort_pages"></div>
+                </div>
+            </div>
+            <!--离群设置-->
+            <div class="tab-pane fade" id="tab_leave" style="height: calc(100% - 10px);z-index: 15">
+                <div class="search_conditions">
+                    <div class="input-group the_same_width">
+                        <span class="input-group-addon">名称</span>
+                        <input type="text" class="form-control" id="leave_name">
+                    </div>
+                    <button type="button" class="btn btn-default the_margin_right" id="leave_search_btn">查询</button>
+                    <button type="button" class="btn btn-default" id="leave_add_btn">新增离群</button>
+                </div>
+                <div style="height: calc(100% - 84px);overflow-y: auto">
+                    <table class="table table-striped" id="leave_table">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>名称</th>
+                            <th>最远距离(米)</th>
+                            <th>有效期</th>
+                            <th>状态</th>
+                            <th>备注</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pages pull-right" style="margin-top: 5px">
+                    <div id="leave_pages"></div>
+                </div>
+            </div>
+            <!--监护组设置-->
+            <div class="tab-pane fade" id="tab_custody" style="height: calc(100% - 10px);z-index: 15">
+                <div class="search_conditions">
+                    <div class="input-group the_same_width">
+                        <span class="input-group-addon">卡号</span>
+                        <input type="text" class="form-control" id="custody_card">
+                    </div>
+                    <button type="button" class="btn btn-default the_margin_right" id="custody_search_btn">查询</button>
+                    <button type="button" class="btn btn-default" id="custody_add_btn">新增监护组</button>
+                </div>
+                <div style="height: calc(100% - 84px);overflow-y: auto">
+                    <table class="table table-striped" id="custody_table">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>名称</th>
+                            <th>卡号</th>
+                            <th>安全范围(米)</th>
+                            <th>有效期</th>
+                            <th>状态</th>
+                            <th>备注</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pages pull-right" style="margin-top: 5px">
+                    <div id="custody_pages"></div>
+                </div>
+            </div>
+            <!--危险源设置-->
+            <div class="tab-pane fade" id="tab_danger" style="height: calc(100% - 10px);z-index: 15">
+                <div class="search_conditions">
+                    <div class="input-group the_same_width">
+                        <span class="input-group-addon">卡号</span>
+                        <input type="text" class="form-control" id="danger_card">
+                    </div>
+                    <button type="button" class="btn btn-default the_margin_right" id="danger_search_btn">查询</button>
+                    <button type="button" class="btn btn-default" id="danger_add_btn">新增危险源</button>
+                </div>
+                <div style="height: calc(100% - 84px);overflow-y: auto">
+                    <table class="table table-striped" id="danger_table">
+                        <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>名称</th>
+                            <th>卡号</th>
+                            <th>安全范围(米)</th>
+                            <th>有效期</th>
+                            <th>状态</th>
+                            <th>备注</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        </tbody>
+                    </table>
+                </div>
+                <div class="pages pull-right" style="margin-top: 5px">
+                    <div id="danger_pages"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/layer/layer.js"></script>
+<script src="lib/mqtt.js"></script>
+<script src="lib/md5.js"></script>
+<script src="src/public/config.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="lib/bootstrap-datetimepicker/js/bootstrap-datetimepicker.min.js"></script>
+<script src="lib/bootstrap-datetimepicker/js/locales/bootstrap-datetimepicker.zh-CN.js"></script>
+<script src="lib/laypage/laypage.js"></script>
+<script src="src/public/main.js"></script>
+<script src="src/fence/dynamicFence.js"></script>
+</body>
+</html>
