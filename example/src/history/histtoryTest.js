@@ -8,6 +8,9 @@ var BUILDING_ID; // 建筑id
 var SCENE_ID; // 场景id
 var FLOOR_ID; // 楼层id
 
+var CURRENT_TIME_START // 自定义提交时间中间变量
+var CURRENT_TIME_END
+
 var dataSource, lastPage
 var pages = 1
 var limit = 50
@@ -56,9 +59,10 @@ function get() {
     </li>`)
       drawTable('')
       if (!data.result.length) {
+        historyLoadingBar(false)
         HG_MESSAGE("当前时间段历史记录为空")
       } else {
-        console.log(data.result)
+        // console.log(data.result)
         dataSource = data.result;
         pages = Math.floor(dataSource.length / limit) + 1
         lastPage = dataSource.length % limit
@@ -66,12 +70,15 @@ function get() {
 
         // console.log("总共页数 ： " + pages)
         // console.log("所有条数 ： " + dataSource.length)
+        historyLoadingBar(false)
 
         drawNavgator(currentPage, pages)
         drawTable(dataSource, 1, limit)
         toggleClassWithPage(currentPage)
       }
     } else {
+      historyLoadingBar(false)
+
       HG_MESSAGE("获取数据最失败");
     }
   });
@@ -147,7 +154,7 @@ function timeFommat(dateStamp) {
   var D = date.getDate()
   var h = date.getHours()
   var m = date.getMinutes()
-  var s = date.getSeconds() < 10 ? '0' + (date.getSeconds()) : (date.getSeconds()) 
+  var s = date.getSeconds() < 10 ? '0' + (date.getSeconds()) : (date.getSeconds())
   return Y + '-' + M + '-' + D + ' ' + h + ':' + m + ':' + s
 }
 
@@ -155,9 +162,22 @@ function timeFommat(dateStamp) {
  查询按钮
 */
 $("#query_history_research").click(function () {
-  TIME = getSearchStartTimeStamp(true) * 1000; //设置历史数据的开始时间
-  END_TIME = getSearchEndTimeStamp(true) * 1000; //设置历史数据的结束时间
-  get();
+  CURRENT_TIME_START = getSearchStartTimeStamp(true) * 1000
+  CURRENT_TIME_END = getSearchEndTimeStamp(true) * 1000
+  if(isNaN(CURRENT_TIME_START)|| isNaN(CURRENT_TIME_END)) {
+    HG_MESSAGE("请按照正确格式输入时间，例如：2000-01-01")
+    return
+  }
+  if (TIME === CURRENT_TIME_START && END_TIME === CURRENT_TIME_END) {
+    // console.log('ok的')
+    return
+  } else {
+    drawTable('')
+    historyLoadingBar(true)
+    TIME = getSearchStartTimeStamp(true) * 1000; //设置历史数据的开始时间
+    END_TIME = getSearchEndTimeStamp(true) * 1000; //设置历史数据的结束时间
+    get();
+  }
 })
 // 分页按钮事件
 $('#navgatorPage').on('click', function () {
@@ -218,52 +238,53 @@ function toggleClassWithPage(index) {
   $('#navgatorPage li').eq(realIndex).addClass('active')
 }
 
+//载入的进度条
+function historyLoadingBar(toggleB) {
+  var range = 30
+  var loadignAnima
+  if (toggleB === true) {
+    $('#loading_hider').css('display', 'block')
+    $('#history_loading_bar').css('width', range + '%')
+    loadignAnima = setInterval(function () {
+      if(range < 95) {
+        range += Math.floor(Math.random() * 20 + 1)
+      } else {
+        clearInterval(loadignAnima)
+      }      
+      $('#history_loading_bar').css('width', range + '%')
+    }, 1000)
+  } else {
+    range = 30;
+    $('#history_loading_bar').css('width', range + '%')
+    $('#loading_hider').css('display', 'none')
+    clearInterval(loadignAnima)
+  }
+}
+
 // 导出为csv
-         
-function tableToExcel(data, startTime, endTime){
+
+function tableToExcel() {
   //要导出的json数据
-  var jsonData = [
-    {
-      name:'路人甲',
-      phone:'123456789',
-      email:'000@123456.com'
-    },
-    {
-      name:'炮灰乙',
-      phone:'123456789',
-      email:'000@123456.com'
-    },
-    {
-      name:'土匪丙',
-      phone:'123456789',
-      email:'000@123456.com'
-    },
-    {
-      name:'流氓丁',
-      phone:'123456789',
-      email:'000@123456.com'
-    },
-  ]
+  var jsonData = dataSource
   //列标题，逗号隔开，每一个逗号就是隔开一个单元格
-  // let str = `姓名,电话,邮箱\n`;
+ 
   let str = `序号,卡号,时间,x坐标,y坐标,z坐标,定位小区,建筑,场景,楼层\n`
   //增加\t为了不让表格显示科学计数法或者其他格式
-  for(let i = 0 ; i < jsonData.length ; i++ ){
-    for(let item in jsonData[i]){
-      if(item == 'time') {
-        str+= `${timeFommat(item.time) + '\t'},`
-      }
-        str+=`${jsonData[i][item] + '\t'},`
-    }
-    str+='\n';
+  for (let i = 0; i < jsonData.length; i++) {
+    // for (let item in jsonData[i]) {
+    //   str+=item
+    // str += '\n';
+    str += jsonData[i].id +','+ jsonData[i].card_id +','+ timeFommat(jsonData[i].time)+',' + jsonData[i].card_x+',' + jsonData[i].card_y+',' + jsonData[i].card_z+',' + jsonData[i].subnet_id+',' + jsonData[i].building_id+','+ jsonData[i].scene_id +','+jsonData[i].floor_id + '\n'
   }
   //encodeURIComponent解决中文乱码
   let uri = 'data:text/csv;charset=utf-8,\ufeff' + encodeURIComponent(str);
   //通过创建a标签实现
   var link = document.createElement("a");
   link.href = uri;
-  //对下载的文件命名
-  link.download =  `${startTime + '-' +endTime}.csv`;
+  //对下载的文件命名(CURRENT_TIME_START, CURRENT_TIME_END)
+  // link.download = `${startTime + '-' + endTime}.csv`;
+  link.download = `${timeFommat(CURRENT_TIME_START) + '-' + timeFommat(CURRENT_TIME_END)}.csv`;
+
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);

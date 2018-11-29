@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="lib/bootstrap-datetimepicker/css/bootstrap-datetimepicker.min.css" />
   <link rel="stylesheet" href="lib/laypage/skin/laypage.css" />
   <link rel="stylesheet" href="src/public/main.css" />
+  <link rel="stylesheet" href="src/history/history2D.css">
 </head>
 
 <body>
@@ -189,7 +190,7 @@
           <button class="btn btn-primary" id="query_history_research">查询</button>
           <button class="btn btn-default" id="query_history_export">导出</button>
         </div>
-        <div class="table_div">
+        <div class="table_div" id="history_table_contianer">
           <table class="table table-striped">
             <thead>
               <tr>
@@ -208,6 +209,10 @@
             <tbody id="table_history_call">
             </tbody>
           </table>
+          <div class="progress" id="loading_hider">
+            <div id="history_loading_bar" class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="45" aria-valuemin="0" aria-valuemax="100"></div>
+            <!-- <span class="sr-only">45% Complete</span> -->
+          </div>
         </div>
         <div>
           <nav aria-label="Page navigation">
