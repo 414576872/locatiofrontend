@@ -1,61 +1,314 @@
 <!DOCTYPE html>
-<html lang="en">
-
+<html lang="zh">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
-  <title>Document</title>
+    <meta charset="UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="shortcut icon" href="img/favicon.png"/>
+    <title></title>
+    <link rel="stylesheet" href="lib/bootstrap/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="src/public/main.css" />
+    <link rel="stylesheet" href="../videoSdk/HGPlayer.min.css" />
+    <link rel="stylesheet" href="../3dSdk/HG3DMap.css" />
+    <link rel="stylesheet" href="src/display/camera.css" />
+    <link rel="stylesheet" href="src/display/realTime3D.css" />
+
 </head>
-
 <body>
-  <div id="canvas_3d"></div>
-  <style type="text/css">
-    html,
-    body {
-      height: 100%;
-      width: 100%;
-      margin: 0;
-      padding: 0;
-    }
-  </style>
-  <script src="../3dSdk/HG3DMap.min.js"></script>
-  <script src="lib/jquery/jquery.min.js"></script>
-  <script>
-    var my_map = new HG3DMap.map();//定义地图对象
-    var init_val = {
-      // scene_url: "3DScene/show.json",//场景地址
-      scene_url: '/json/xyz.json',
-      model_height: 1.5,//模型高度
-      track_height: 1.4,//轨迹高度
-      tips_height: 1.5,//提示语高度
-      camera_tween_speed: 1,//相机追踪平移速度
-      camera_model_patrol_dist: 20,//相机离巡视目标的最小距离
-      dom_element: "canvas_3d",
-      card_type: 1,//1 代表的 fbx， 2 代表的是 json
-      ex_dom_element: "inset",//小地图的 dom 元素
-      scale_dist: 20,//聚类距离系数，越大越密
-      start_move_dist: 0.1,//开始移动的最小距离差
-      min_stop_delta_time: 1,//最小的停止移动时间
-      cache_time: 2,//数据缓存时间
-      open_tips: false,//是否开启内部卡标签提示
-      offset_top: 57,//dom_element，离浏览器上边框的偏移
-      offset_left: 0,//dom_element，离浏览器左边框的偏移
-      open_fps: true,//是否开启 fps 检测
-      model_path: "/position_3d/App/Public/3D/",//模型存放路径，这个路      径下包含: 定位卡模型，基站模型和点击点标记模型select_color: 0xff0000,//模型选中显示颜色
-      flash_color_1: 0xff0000,//闪烁颜色 1
-      flash_color_2: 0xffcc00,//闪烁颜色 2
-      fps: 60,//渲染帧率，默认是 20 帧
-      little_map_render_width: 300,//小地图的渲染宽
-      little_map_width_height_ratio: 16 / 9,//小地图的渲染宽高比例
-      shadow_height: 0,//阴影高度
-      open_shadow: true,//开始起阴影
-      render_little_map_factor: 0.9,//渲染场景占满小地图系数比例
-      scene_background_imgs: ['px.jpg', 'px.jpg', 'py.jpg', 'ny.jpg', 'px.jpg', 'px.jpg'],//天空盒子
-      open_little_map: true//开启小地图
-    }
-    my_map.init(init_val)
-  </script>
-</body>
+<!--新的报警-->
+<div class="new_alarm_info">
+    <div class="left_icon">
+        <img src="./img/alarm_icon.png" alt="">
+    </div>
+    <div class="right_alarm">
+        <div class="real_content" id="new_alarm_text">
+            <p></p>
+        </div>
+        <div class="all_buttons">
+            <div class="close_button">
+                <span class="glyphicon glyphicon-remove"></span>
+            </div>
+            <div class="click_button" id="event_buttons">
 
+            </div>
+        </div>
+    </div>
+</div>
+<!--上边栏-->
+<header class="header">
+    <h3 class="system_name"></h3>
+    <div class="login_info">
+        <div class="bell_container" style="z-index: 1001;">
+            <span class="glyphicon glyphicon-bell"></span>
+            <!--<span class="alarm_number"></span>-->
+            <ul class="alarm_list" ></ul>
+        </div>
+        <a href="#" class="modify_user"><img src="img/icon/userEdit.png"></a>
+        <a href="#" class="login_out"><img src="img/icon/logOut.png"></a>
+    </div>
+</header>
+<!--左侧边导航栏-->
+<div id="main_nav">
+    <div>
+        <h4>实时显示<span class="glyphicon glyphicon-chevron-down"></span></h4>
+        <ul class="ul_show">
+            <li><a href="realTime2D.html">平面视图</a></li>
+            <li><a href="realTime3D.html" class="active">立体视图</a></li>
+            <li><a href="realTimeList.html">列表视图</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>轨迹回放<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="historyCard2D.html">平面视图</a></li>
+            <li><a href="historyCard3D.html">立体视图</a></li>
+            <li><a href="historyHeatMap.html">轨迹热力图</a></li>
+            <li><a href="historyTest.html">历史查询</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>地图管理<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="sceneBuilding.html">场景建筑</a></li>
+            <li><a href="map.html">地图设置</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>电子围栏<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="fenceAlarm.html">警示信息</a></li>
+            <li><a href="staticFence.html">静态围栏</a></li>
+            <li><a href="ruleAdmin.html">规则管理</a></li>
+            <li><a href="dynamicFence.html">动态围栏</a></li>
+            <li><a href="areaSet.html">障碍物设置</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>设备管理<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="alarmCall.html">呼叫求救</a></li>
+            <li><a href="lowerPower.html">欠压提醒</a></li>
+            <li><a href="cardInfo.html">卡号列表</a></li>
+            <li><a href="camera.html">摄像头管理</a></li>
+            <li><a href="nvrDevice.html">录像机管理</a></li>
+        </ul>
+    </div>
+    <div>
+        <h4>拓展功能<span class="glyphicon glyphicon-chevron-right"></span></h4>
+        <ul>
+            <li><a href="attendance.html">考勤报表</a></li>
+            <li><a href="systemConfig.html">系统配置</a></li>
+        </ul>
+    </div>
+</div>
+
+<!--修改用户名和密码模态框-->
+<div class="modal fade" id="modal_modify_user" data-backdrop=false>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>修改用户</h4>
+            </div>
+            <div class="modal-body">
+                <form class="form-horizontal">
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">用户名</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" id="input_modify_user_name">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">旧密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_old">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">新密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_new">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label">确定密码</label>
+                        <div class="col-sm-9">
+                            <input type="password" class="form-control" id="input_modify_user_password_again">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" data-dismiss="modal">取消</button>
+                <button class="btn btn-default" id="button_modify_user_save">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--录像是否确认下载模态框-->
+<div class="modal fade" id="modal_video_download" data-backdrop=false style="z-index: 6000;">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4>提示</h4>
+            </div>
+            <div class="modal-body">
+                该设备正在录像，是否保存视频文件？
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default" id="cancel_save">取消</button>
+                <button class="btn btn-info" id="confirm_download_video">保存</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--右侧内容-->
+<div id="main_content">
+    <!--案例内容部分,自适应外界容器-->
+    <div id="example">
+        <!--放置地图的容器-->
+        <div id="canvas_3d" style="width: 1000px; height:600px">
+        </div>
+
+        <!-- 放置蜂鸟地图，测试用 -->
+        <div id="fmap_3d" style="width: 1000px; height: 600px"></div>
+
+        <!--放置小地图的容器-->
+        <div id="panel_little_map">
+            <div id="btn_open_little_map">
+                <img src="img/icon_map.png" alt="">
+            </div>
+            <div id="little_map_panel">
+                <div id="little_map"></div>
+                <i class="glyphicon glyphicon-remove"></i>
+            </div>
+
+        </div>
+
+
+        <div id="tips_card"></div>
+
+        <!--地图右下角 鼠标所在位置的坐标显示-->
+        <div id="mouse_position" style="z-index: 999"></div>
+
+         <!--地图左下角 回到原点-->
+        <div class="group_icon_left_bottom">
+            <img src="img/backCenter.png" alt="pic"  id="back_origin">
+            <img src="img/patrol_scene.png" alt="pic"  id="btn_patrol_scene">
+            <img src="img/patrol_random.png" alt="pic"  id="btn_patrol_random">
+        </div>
+
+        <!--载入时的loading图标-->
+        <div id="loading_img">
+            <div class="progress_bar">
+                <img src="img/loading.gif">
+                <div class="progress_bar_bottom">
+                    <div class="progress_bar_top">
+                    </div>
+                </div>
+                <p></p>
+            </div>
+        </div>
+
+        <!--卡号信息框-->
+        <div id="panel_card_info" style="z-index: 998">
+            <div></div>
+            <span></span>
+        </div>
+
+        <!--地图左上的地图选择和输入卡号锁定某张卡-->
+        <div class="left_menu" style="z-index: 999">
+            <div class="input-group"  style="width:225px;margin-right: 10px;">
+                <span class="input-group-addon">地图</span>
+                <select class="form-control" id="floor_select">
+                </select>
+            </div>
+            <div class="input-group" style="width: 225px;margin-top: 10px;">
+                <input class="form-control" id="query_card_input" style="border-radius: 4px" placeholder="输入卡号查找"/>
+                <i class="glyphicon glyphicon-search"
+                   style="position: absolute;top: 10px;right: 10px;z-index: 3;color: #ccc;"></i>
+            </div>
+
+            <div class="list-group" id="search_card_list" style="width: 225px;margin-top: 10px;">
+            </div>
+        </div>
+
+        <!--地图右侧悬浮框-->
+        <div class="right_menu shadow" style="z-index: 999">
+            <div>
+                区域列表<i class="glyphicon glyphicon-chevron-down" data-id="area"></i>
+            </div>
+            <div>
+                标签列表<i class="glyphicon glyphicon-chevron-right" data-id="track"></i>
+            </div>
+            <div>
+                摄像头列表<i class="glyphicon glyphicon-chevron-right" data-id="equip"></i>
+            </div>
+        </div>
+        <div class="right_content shadow" style="z-index:999">
+            <div id="area">
+                <div class="panel_table_area">
+                    <table class="table table-striped">
+                        <thead>
+                        <tr>
+                            <th><input type="checkbox"></th><th>名称</th><th>人数</th><th>启用</th><th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody id="table_area">
+
+                        </tbody>
+                    </table>
+                </div>
+                <h5></h5>
+            </div>
+            <div id="track">
+                <div class="form-group">
+                    <span>(点击"选择框"进行轨迹追踪)</span>
+                    <span id="btn_clear_track" style="cursor: pointer;color: #0099ff;position: relative;left:90px">清除轨迹</span>
+                </div>
+                <div class="panel_table_area">
+                    <table class="table table-striped">
+                        <thead id="thead_card_info">
+                        <tr>
+                            <th><input type="checkbox"></th><th>卡号</th><th>操作</th><th>视点追踪</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tbody_card_info">
+
+                        </tbody>
+                    </table>
+                </div>
+                <!--<p id="center_card" style="margin-bottom: 0px;margin-top: 10px;width: 80%;display: inline-block;"></p>-->
+            </div>
+            <div id="equip">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>名称</th><th>操作</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table_equip">
+
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+<script src="lib/jquery/jquery.min.js"></script>
+<script src="lib/layer/layer.js"></script>
+<script src="lib/bootstrap/js/bootstrap.min.js"></script>
+<script src="lib/fengmap.min.js"></script>
+<script src="lib/mqtt.js"></script>
+<script src="lib/md5.js"></script>
+<script src="src/public/config.js"></script>
+<script src="../3dSdk/HG3DMap.min.js"></script>
+<script src="../videoSdk/HGPlayer.min.js"></script>
+<script src="src/public/main.js"></script>
+<script src="src/display/3d_test.js"></script>
+<script src="src/display/camera.js"></script>
+</body>
 </html>
