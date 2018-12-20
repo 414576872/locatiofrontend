@@ -103,6 +103,18 @@ $("#table_card_info").on("click", ".table_card_info_edit", function () {
     $("#modal_card_edit_card").val(card);
     $("#modal_card_edit_id").val(id);
     $("#modal_card_edit_comment").val(comment);
+    
+    // 测试查询标签权限信息的测试。
+    // console.log(EDIT_ID)
+    HG_AJAX("/position_sdk/ModularArea/Area/getArea", {
+
+    },"post", function (data) {
+        if(data.type == 1) {
+            console.log(data)
+        } else {
+
+        }
+    })
 });
 
 /*
